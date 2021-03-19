@@ -1,0 +1,22 @@
+name: Teeeeest
+on:
+  push:
+    branches:
+      - master
+jobs:
+  my_testing:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Pring Hello Message
+      run : echo "Hellow Wolrd"
+      
+  my_deploy:
+    runs-on: ubuntu-latest
+    needs: [my_testing]
+    
+    steps:
+    - name: Pring
+      run : echo "Hellow"
+    
+  
