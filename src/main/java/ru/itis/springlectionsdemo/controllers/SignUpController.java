@@ -10,7 +10,7 @@ import ru.itis.springlectionsdemo.services.SignUpService;
 
 @Controller
 public class SignUpController {
-
+//
     @Autowired
     private SignUpService signUpService;
 
