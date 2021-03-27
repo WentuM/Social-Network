@@ -23,6 +23,6 @@ class HelloControllerTest {
 		             .expectStatus()
 		             .isOk()
 		             .expectBody(String.class)
-		             .isEqualTo("Hello Spring Boot!");
+		             .isEqualTo("H Spring Boot!");
 	}
 }
