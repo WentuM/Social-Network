@@ -18,7 +18,7 @@ public class SignUpController {
     @PermitAll
     @GetMapping("/signUp")
     public String getSignUpPage() {
-        return "sign_up_page";
+        return "login/registration";
     }
 
     @PermitAll

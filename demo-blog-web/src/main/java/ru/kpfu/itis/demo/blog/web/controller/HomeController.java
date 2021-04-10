@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.annotation.security.PermitAll;
 
 @Controller
-public class SignInController {
+public class HomeController {
 
     @PermitAll
-    @GetMapping("/signIn")
+    @GetMapping("/home")
     public String getSignInPage() {
-        return "login/login";
+        return "home_twitter/home";
     }
 }

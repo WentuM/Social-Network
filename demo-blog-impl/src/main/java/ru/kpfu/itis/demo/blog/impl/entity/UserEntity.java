@@ -25,6 +25,12 @@ public class UserEntity {
 
     private String hashPassword;
 
+    private String accountId;
+
+    @OneToOne
+    @JoinColumn(name = "accountId", insertable = false, updatable = false)
+    UserAccount userAccount;
+
     @Enumerated(value = EnumType.STRING)
     private State state;
 

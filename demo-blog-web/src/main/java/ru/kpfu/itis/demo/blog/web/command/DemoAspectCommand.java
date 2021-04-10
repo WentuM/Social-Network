@@ -14,8 +14,8 @@ public class DemoAspectCommand implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        service.sayHello();
-        service.publicHello();
+//        service.sayHello();
+//        service.publicHello();
         System.out.println(service.hello());
     }
 }

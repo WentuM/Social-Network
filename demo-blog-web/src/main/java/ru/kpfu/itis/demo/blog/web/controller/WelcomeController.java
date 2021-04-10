@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.annotation.security.PermitAll;
 
 @Controller
-public class SignInController {
+public class WelcomeController {
 
     @PermitAll
-    @GetMapping("/signIn")
+    @GetMapping("/welcome")
     public String getSignInPage() {
-        return "login/login";
+        return "login/index";
     }
 }

@@ -1,0 +1,164 @@
+<!--{% extends 'layout/homeBase.html' %}-->
+<!--{% load static %}-->
+<!--{% block home_content %}-->
+<!--    <div class="main__block">-->
+<!--        <div class="block__head">-->
+<!--            <h2 class="block__head&#45;&#45;title">Твит</h2>-->
+<!--        </div>-->
+<!--        <div class="tweet__items">-->
+<!--            <a href="{% url 'single_twit' twit_info.user_creator.user_id twit_info.pk %}" class="comment__item&#45;&#45;over">-->
+<!--                <div class="tweet__header">-->
+<!--                    <div class="tweet__image tweet__image&#45;&#45;over">-->
+<!--                        <img src="{% static 'images/default_profile_reasonably_small.png' %}" alt=""-->
+<!--                             class="tweet__img tweet__img&#45;&#45;over">-->
+<!--                    </div>-->
+<!--                    <div class="tweet__info&#45;&#45;over">-->
+<!--                        <div class="tweet__short-info&#45;&#45;over">-->
+<!--                            <div class="tweet__name-author">{{ twit_info.user_creator.username }}</div>-->
+<!--                            <div class="tweet__aliase-author">@{{ twit_info.user_creator.user_id }}</div>-->
+<!--                            <div class="tweet__date-author">{{ twit_info.date | date:"M d,Y H:i" }}</div>-->
+<!--                        </div>-->
+<!--                        <div class="tweet__text comment__text tweet__text&#45;&#45;over">-->
+<!--                            {{ twit_info.text }}-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </a>-->
+
+<!--            {% if over_comments %}-->
+<!--                {% for over_comment in over_comments %}-->
+<!--                    <a href="{% url 'single_comment' twit_info.pk over_comment.pk %}"-->
+<!--                       class="comment__item&#45;&#45;over">-->
+<!--                        <div class="tweet__header">-->
+<!--                            <div class="tweet__image tweet__image&#45;&#45;over">-->
+<!--                                <img src="{% static 'images/default_profile_reasonably_small.png' %}" alt=""-->
+<!--                                     class="tweet__img tweet__img&#45;&#45;over">-->
+<!--                            </div>-->
+<!--                            <div class="tweet__info&#45;&#45;over">-->
+<!--                                <div class="tweet__short-info&#45;&#45;over">-->
+<!--                                    <div class="tweet__name-author">{{ over_comment.user_commentor.username }}</div>-->
+<!--                                    <div class="tweet__aliase-author">@{{ over_comment.user_commentor.user_id }}</div>-->
+<!--                                    <div class="tweet__date-author">{{ over_comment.date | date:"M d,Y H:i" }}</div>-->
+<!--                                </div>-->
+<!--                                <div class="tweet__text comment__text tweet__text&#45;&#45;over">-->
+<!--                                    {{ over_comment.comment_text }}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </a>-->
+<!--                {% endfor %}-->
+<!--            {% endif %}-->
+
+<!--            {% if single_comment %}-->
+<!--                <div class="tweet__item tweet__item&#45;&#45;singletweet">-->
+<!--                    <div class="tweet__header singletweet__header">-->
+<!--                        <div class="singletweet__info">-->
+<!--                            <div class="tweet__image singletweet__image">-->
+<!--                                <img src="{% static 'images/default_profile_reasonably_small.png' %}" alt=""-->
+<!--                                     class="tweet__img singlet__img">-->
+<!--                            </div>-->
+<!--                            <div class="singlettweet__author">-->
+<!--                                <div class="tweet__name-author singlet__name">{{ single_comment.user_commentor.username }}</div>-->
+<!--                                <div class="tweet__aliase-author singlet__aliase">-->
+<!--                                    @{{ single_comment.user_commentor.user_id }}</div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="tweet__text singlettweet__text">-->
+<!--                        {{ single_comment.comment_text }}-->
+<!--                    </div>-->
+<!--                    <div class="tweet__date-author singlettweet__date">{{ single_comment.date | date:"M d,Y H:i" }}</div>-->
+
+<!--                    <button type="button" class="tweet__comment singlet__comment-btn" data-toggle="modal"-->
+<!--                            data-target="#{{ single_comment.user_commentor.user_id }}">-->
+<!--                        <div class="singleet__help-flex">-->
+<!--                            <svg class="tweet__comment-icon">-->
+<!--                                <use xlink:href="#comment"></use>-->
+<!--                            </svg>-->
+<!--                            <div class="tweet__reply">ответить</div>-->
+<!--                        </div>-->
+<!--                    </button>-->
+
+<!--                </div>-->
+<!--            {% endif %}-->
+<!--        </div>-->
+<!--        <div class="singletweet__comments">-->
+<!--            {% if subcomments %}-->
+<!--                {% for subcomment in subcomments %}-->
+<!--                    <a href="{% url 'single_comment' twit_info.pk subcomment.pk %}" class="comment__item">-->
+<!--                        <div class="tweet__header">-->
+<!--                            <div class="tweet__image">-->
+<!--                                <img src="{% static 'images/default_profile_reasonably_small.png' %}" alt=""-->
+<!--                                     class="tweet__img">-->
+<!--                            </div>-->
+<!--                            <div class="tweet__name-author">{{ subcomment.user_commentor.username }}</div>-->
+<!--                            <div class="tweet__aliase-author">@{{ subcomment.user_commentor.user_id }}</div>-->
+<!--                            <div class="tweet__date-author">{{ subcomment.date | date:"M d,Y H:i" }}</div>-->
+<!--                        </div>-->
+<!--                        <div class="tweet__text comment__text">-->
+<!--                            {{ subcomment.comment_text }}-->
+<!--                        </div>-->
+
+<!--                        <button type="button" class="tweet__comment">-->
+<!--                            <svg class="tweet__comment-icon">-->
+<!--                                <use xlink:href="#comment"></use>-->
+<!--                            </svg>-->
+<!--                            <div class="tweet__reply">ответить</div>-->
+<!--                        </button>-->
+<!--                    </a>-->
+<!--                {% endfor %}-->
+<!--            {% endif %}-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+
+<!--    <div class="modal fade" id="{{ single_comment.user_commentor.user_id }}" tabindex="-1" role="dialog"-->
+<!--         aria-labelledby="exampleModalLabel"-->
+<!--         aria-hidden="true">-->
+<!--        <div class="modal-dialog">-->
+<!--            <form class="modal-content" action="{% url 'create_subcomment' twit_info.pk single_comment.pk %}"-->
+<!--                  method="post">-->
+<!--                {% csrf_token %}-->
+<!--                <div class="modal-header">-->
+<!--                    <h5 class="modal-title" id="exampleModalLabel">Комментарий</h5>-->
+<!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                        <span aria-hidden="true">&times;</span>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+<!--                    <div class="comment__item">-->
+<!--                        <div class="tweet__header">-->
+<!--                            <div class="tweet__image">-->
+<!--                                <img src="{% static 'images/default_profile_reasonably_small.png' %}" alt=""-->
+<!--                                     class="tweet__img">-->
+<!--                            </div>-->
+<!--                            <div class="tweet__name-author">{{ single_comment.user_commentor }}</div>-->
+<!--                            <div class="tweet__aliase-author">@{{ single_comment.user_commentor.user_id }}</div>-->
+<!--                            <div class="tweet__date-author">{{ single_comment.date | date:"M d,Y H:i" }}</div>-->
+<!--                        </div>-->
+<!--                        <div class="tweet__text comment__text">-->
+<!--                            {{ single_comment.comment_text }}-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="write__tweter-inner">-->
+<!--                        <div class="tweet__header tweet__header&#45;&#45;modal">-->
+<!--                            <div class="tweet__image">-->
+<!--                                <img src="{% static 'images/default_profile_reasonably_small.png' %}" alt=""-->
+<!--                                     class="tweet__img">-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="write__tweet-field">-->
+<!--                            <textarea name="comment_text" class="write__tweet-text" id="" cols="30" rows="10"-->
+<!--                                      placeholder="Расскажи что случилось?"></textarea>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+<!--                    <button type="submit" class="btn btn-primary">Save changes</button>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--{% endblock %}-->

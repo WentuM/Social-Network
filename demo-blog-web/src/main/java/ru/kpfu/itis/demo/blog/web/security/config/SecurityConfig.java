@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
 
@@ -35,7 +36,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/signUp").permitAll()
-                .antMatchers("/").authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/signIn")
@@ -49,7 +49,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID")
                 .and()
                 .rememberMe()
-                .rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository());
+                .rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository())
+                .and()
+                .apply(new SpringSocialConfigurer());
 
     }
 
