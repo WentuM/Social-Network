@@ -14,6 +14,8 @@ public class UserDetailsImpl implements UserDetails {
         this.userEntity = userEntity;
     }
 
+    public String getEmail() { return userEntity.getEmail(); }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -26,7 +28,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userEntity.getEmail();
+        return userEntity.getName();
     }
 
     @Override

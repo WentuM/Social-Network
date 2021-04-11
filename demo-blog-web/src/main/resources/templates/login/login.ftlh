@@ -26,6 +26,7 @@
 <#--                {% elif error_auth %}-->
 <#--                <div>{{ error_auth }}</div>-->
 <#--                {% endif %}-->
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}">
                 <div class="input__group">
                     <label for="email" class="input__label">Адрес электронной почты</label>
                     <input type="email" id="email" name="email" class="input__field" required>

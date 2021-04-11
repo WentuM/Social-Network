@@ -1,26 +1,27 @@
+<#import "/spring.ftl" as spring/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Twitter</title>
-    <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
-    <#import "/templates/layout/head.ftlh" as s>
+    <link rel="stylesheet" href="<@spring.url '/css/style.min.css'/>"/>
+    <#import "../layout/head.ftlh" as s>
     <@s.head/>
 </head>
 <body>
-<#import "/templates/layout/sprite.ftl" as m>
+<#import "../layout/sprite.ftl" as m>
 <@m.sprite/>
 
 <main class="home">
     <div class="home__inner">
         <header class="header">
             <div class="header__inner">
-                <a href="{% url 'home' %}" class="circle__small-bird">
+                <a href="/home" class="circle__small-bird">
                     <svg class="header__small-bird">
                         <use xlink:href="#small_bird"></use>
                     </svg>
                 </a>
                 <nav class="nav">
-                    <a href="{% url 'home' %}" class="nav__link">
+                    <a href="/home" class="nav__link">
                         <svg class="home__home helper-color">
                             <use xlink:href="#home"></use>
                         </svg>
@@ -28,7 +29,7 @@
                             <span>Главная</span>
                         </div>
                     </a>
-                    <a href="{% url 'profile' twitter_user.username id %}" class="nav__link">
+                    <a href="/profile" class="nav__link">
                         <svg class="profile helper-color">
                             <use xlink:href="#profile"></use>
                         </svg>
@@ -42,12 +43,12 @@
                 <a href="{% url 'logout' %}" class="nav__link--tweet">Выйти</a>
                 <div class="home__small-profile">
                     <div class="home__profile-image">
-                        <img src="{% static 'images/default_profile_reasonably_small.png' %}" class="home__img" alt="">
+                        <img src="<@spring.url '/images/default_profile_reasonably_small.png'/>" class="home__img" alt="">
                     </div>
                     <div class="home__small-info">
-                        <div class="small__profile-name">{{ twitter_user.username }}
+                        <div class="small__profile-name">${username}
                         </div>
-                        <div class="small__profile-alies">@{{ twitter_user.user_id }}
+                        <div class="small__profile-alies">${email}
                         </div>
                     </div>
                 </div>
@@ -55,12 +56,12 @@
         </header>
         <div class="main__block">
             <div class="block__head block__head-profile">
-                <a href="{% url 'home' %}" class="arrow__back">
+                <a href="/home" class="arrow__back">
                     <svg class="arrow">
                         <use xlink:href="#arrow"></use>
                     </svg>
                 </a>
-                <h2 class="block__head--title">{{ twitter_user.username }}</h2>
+                <h2 class="block__head--title">${username}</h2>
             </div>
             <div class="profile__photo">
                 <div class="profile__circle--photo">
@@ -70,8 +71,8 @@
             <div class="profile__info">
                 <a href="{% url 'logout' %}" class="profile__edit">
                     <span class="edit__text">Выйти из профиля</span></a>
-                <h1 class="profile__name">{{ twitter_user.username }}</h1>
-                <div class="profile__alies">@{{ twitter_user.user_id }}</div>
+                <h1 class="profile__name">${username}</h1>
+                <div class="profile__alies">${email}</div>
                 <div class="profile__alies">Joined: {{ twitter_user.create_time | date:"Y.m.d" }}</div>
                 <div class="profile__count-tweets">
                     <b class="profile__count">{{ count }}</b>
@@ -90,8 +91,8 @@
                             <img src="{% static 'images/default_profile_reasonably_small.png' %}" alt=""
                                  class="tweet__img">
                         </div>
-                        <div class="tweet__name-author">{{ twit.user_creator.username }}</div>
-                        <div class="tweet__aliase-author">@{{ twit.user_creator.user_id }}</div>
+                        <div class="tweet__name-author">${username}</div>
+                        <div class="tweet__aliase-author">${email}</div>
                         <div class="tweet__date-author">{{ twit.date | date:"M d,Y" }}</div>
                     </div>
                     <div class="tweet__text">

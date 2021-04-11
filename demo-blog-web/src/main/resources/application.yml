@@ -1,0 +1,19 @@
+#server:
+#  port: 9091
+#
+#spring:
+#  application:
+#    name: spring-boot-facebook-oauth-demo
+#
+#security:
+#  oauth2:
+#    client:
+#      clientId: 183840736763794
+#      clientSecret: aee477105e9d16c48f2ab33aa17a877a
+#      accessTokenUri: https://graph.facebook.com/oauth/access_token
+#      userAuthorizationUri: https://www.facebook.com/dialog/oauth
+#      tokenName: oauth_token
+#      authenticationScheme: query
+#      clientAuthenticationScheme: form
+#    resource:
+#      userInfoUri: https://graph.facebook.com/me

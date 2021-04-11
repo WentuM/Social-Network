@@ -27,9 +27,9 @@ public class UserEntity {
 
     private String accountId;
 
-    @OneToOne
-    @JoinColumn(name = "accountId", insertable = false, updatable = false)
-    UserAccount userAccount;
+//    @OneToOne
+//    @JoinColumn(name = "accountId", insertable = false, updatable = false)
+//    UserAccount userAccount;
 
     @Enumerated(value = EnumType.STRING)
     private State state;

@@ -25,6 +25,7 @@
 <#--                {% elif error_email_repeat %}-->
 <#--                <div>{{ error_email_repeat }}</div>-->
 <#--                {% endif %}-->
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}">
                 <div class="input__group">
                     <label for="username" class="input__label">Имя</label>
                     <input type="text" id="nick" name="username" class="input__field" required>
