@@ -43,6 +43,7 @@ public class BlogPostService implements PostService {
 
     @Override
     public Boolean save(PostDTO postDTO) {
+        //?
         postDTO.setId(null);
         postRepository.save(modelMapper.map(postDTO, PostEntity.class));
         return true;

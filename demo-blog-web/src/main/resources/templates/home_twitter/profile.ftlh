@@ -40,7 +40,7 @@
 
                 </nav>
                 {#                <a href="#" class="nav__link--tweet">Твитнуть</a>#}
-                <a href="{% url 'logout' %}" class="nav__link--tweet">Выйти</a>
+                <a href="/logout" class="nav__link--tweet">Выйти</a>
                 <div class="home__small-profile">
                     <div class="home__profile-image">
                         <img src="<@spring.url '/images/default_profile_reasonably_small.png'/>" class="home__img" alt="">
@@ -65,11 +65,11 @@
             </div>
             <div class="profile__photo">
                 <div class="profile__circle--photo">
-                    <img src="{% static 'images/default_profile_400x400.png' %}" alt="" class="profile__img">
+                    <img src="<@spring.url '/images/default_profile_400x400.png'/>" alt="" class="profile__img">
                 </div>
             </div>
             <div class="profile__info">
-                <a href="{% url 'logout' %}" class="profile__edit">
+                <a href="/logout" class="profile__edit">
                     <span class="edit__text">Выйти из профиля</span></a>
                 <h1 class="profile__name">${username}</h1>
                 <div class="profile__alies">${email}</div>
@@ -88,7 +88,7 @@
                 <a href="{% url 'single_twit' twit.user_creator.user_id twit.pk%}" class="tweet__item">
                     <div class="tweet__header">
                         <div class="tweet__image">
-                            <img src="{% static 'images/default_profile_reasonably_small.png' %}" alt=""
+                            <img src="<@spring.url '/images/default_profile_reasonably_small.png'/>" alt=""
                                  class="tweet__img">
                         </div>
                         <div class="tweet__name-author">${username}</div>

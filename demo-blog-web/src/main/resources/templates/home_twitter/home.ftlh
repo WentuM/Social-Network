@@ -1,4 +1,5 @@
 <#import "/spring.ftl" as spring/>
+<#import "ui.ftl" as ui/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,7 +41,7 @@
 
                 </nav>
                 {#                <a href="#" class="nav__link--tweet">Твитнуть</a>#}
-                <a href="{% url 'logout' %}" class="nav__link--tweet">Выйти</a>
+                <a href="/logout" class="nav__link--tweet">Выйти</a>
                 <div class="home__small-profile">
                     <div class="home__profile-image">
                         <img src="<@spring.url '/images/default_profile_reasonably_small.png'/>" class="home__img" alt="">
@@ -48,7 +49,7 @@
                     <div class="home__small-info">
                         <div class="small__profile-name">${username}
                         </div>
-                        <div class="small__profile-alies">@{{ twitter_user.user_id }}
+                        <div class="small__profile-alies">${email}
                         </div>
                     </div>
                 </div>
@@ -58,15 +59,15 @@
             <div class="block__head">
                 <h2 class="block__head--title">Главная</h2>
             </div>
-            <form action="{% url 'create_twit' %}" method="post" class="block__write-tweet">
-                {% csrf_token %}
+            <form action="/posts/savePost" method="post" class="block__write-tweet">
+<#--                {% csrf_token %}-->
                 <div class="write__tweter-inner">
                     <div class="write__tweet-image">
                         <img src="<@spring.url 'images/default_profile_reasonably_small.png'/>" class="write__tweet-img"
                              alt="">
                     </div>
                     <div class="write__tweet-field">
-                    <textarea name="text" class="write__tweet-text" id="" cols="30" rows="10"
+                    <textarea name="body" class="write__tweet-text" id="" cols="30" rows="10"
                               placeholder="Расскажи что случилось?"></textarea>
                     </div>
                 </div>

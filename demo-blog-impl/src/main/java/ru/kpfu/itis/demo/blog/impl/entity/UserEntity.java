@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @Entity
@@ -18,14 +20,12 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String name;
-
     private String email;
-
     private String hashPassword;
+    transient private String hashPassword2;
 
-    private String accountId;
+//    private String accountId;
 
 //    @OneToOne
 //    @JoinColumn(name = "accountId", insertable = false, updatable = false)

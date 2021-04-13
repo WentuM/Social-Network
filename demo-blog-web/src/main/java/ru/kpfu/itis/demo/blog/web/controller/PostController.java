@@ -2,6 +2,7 @@ package ru.kpfu.itis.demo.blog.web.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +21,14 @@ public class PostController {
     public PostController(BlogPostService blogPostService) {
         this.blogPostService = blogPostService;
     }
-//
+
+    //
 //    @GetMapping("/proj")
 //    public List<PostDTO> find(){
 //        return blogPostService.findAllProj();
 //    }
     @GetMapping
-    public Page<PostDTO> findAll( @RequestParam(required = false) String name, Pageable pageable){
+    public Page<PostDTO> findAll(@RequestParam(required = false) String name, Pageable pageable) {
         return blogPostService.findAllByName(name, pageable);
     }
 
@@ -36,13 +38,14 @@ public class PostController {
                 .orElseThrow(() -> new PostNotFoundException("Post not found"));
     }
 
-    @PostMapping
-    public void save(@RequestBody PostDTO postDTO){
+    @RequestMapping(value = "/savePost", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    public void save(@RequestBody PostDTO postDTO) {
         blogPostService.save(postDTO);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable Long id) {
         blogPostService.deleteById(id);
     }
 

@@ -1,13 +1,14 @@
+<#import "/spring.ftl" as spring/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Twitter</title>
-    <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
-    <#import "/templates/layout/head.ftlh" as s>
+    <link rel="stylesheet" href="<@spring.url '/css/style.min.css'/>"/>
+    <#import "../layout/head.ftlh" as s>
     <@s.head/>
 </head>
 <body>
-<#import "/templates/layout/sprite.ftl" as m>
+<#import "../layout/sprite.ftl" as m>
 <@m.sprite/>
 
 <main class="home">
@@ -99,7 +100,7 @@
                     <div class="tweet__date-author singlettweet__date">{{ twit_info.date | date:"M d,Y H:i" }}</div>
 
                     <button type="button" class="tweet__comment singlet__comment-btn" data-toggle="modal"
-                            data-target="#{{ twit_info.user_creator.user_id }}">
+                            data-target="{{ twit_info.user_creator.user_id }}">
                         <div class="singleet__help-flex">
                             <svg class="tweet__comment-icon">
                                 <use xlink:href="#comment"></use>

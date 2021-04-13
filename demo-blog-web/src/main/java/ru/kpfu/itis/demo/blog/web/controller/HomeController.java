@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import ru.kpfu.itis.demo.blog.api.dto.UserForm;
 import ru.kpfu.itis.demo.blog.api.service.UserService;
 import ru.kpfu.itis.demo.blog.web.security.UserDetailsImpl;
@@ -20,6 +21,8 @@ public class HomeController {
 
     private static UserForm userForm = new UserForm();
 
+
+
     @PermitAll
     @GetMapping("/home")
     public String getHomePage(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
@@ -27,4 +30,6 @@ public class HomeController {
         model.addAttribute("email", userDetails.getEmail());
         return "home_twitter/home";
     }
+
+
 }
