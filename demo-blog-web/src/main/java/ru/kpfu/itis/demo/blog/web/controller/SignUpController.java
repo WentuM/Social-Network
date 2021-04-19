@@ -33,7 +33,7 @@ public class SignUpController {
 
             return "login/registration";
         }
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {    
             Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
 
             model.mergeAttributes(errors);

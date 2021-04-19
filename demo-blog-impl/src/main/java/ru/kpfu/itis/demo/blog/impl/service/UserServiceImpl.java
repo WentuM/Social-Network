@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.kpfu.itis.demo.blog.api.dto.PostDTO;
 import ru.kpfu.itis.demo.blog.api.dto.UserDTO;
 import ru.kpfu.itis.demo.blog.api.service.UserService;
 import ru.kpfu.itis.demo.blog.impl.entity.UserEntity;
@@ -46,4 +47,21 @@ public class UserServiceImpl implements UserService {
     public Boolean deleteById(Long aLong) {
         return null;
     }
+
+    @Override
+    public UserDTO findByEmail(String email) {
+        Optional<UserEntity> user = usersRepository.findByEmail(email);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(user.get().getId());
+        userDTO.setUserEmail(user.get().getEmail());
+        userDTO.setUserName(user.get().getName());
+        return userDTO;
+    }
+
+//    public Boolean saveLike(UserDTO userDTO, PostDTO postDTO) {
+//        Optional<UserEntity> userEntity = usersRepository.findByEmail(userDTO.getUserEmail());
+//        userEntity.get().getLikePosts().add(postDTO);
+//        usersRepository.save(userEntity.get());
+//        return true;
+//    }
 }

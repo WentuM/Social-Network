@@ -14,6 +14,10 @@ public class UserDetailsImpl implements UserDetails {
         this.userEntity = userEntity;
     }
 
+    public Long getId() {
+        return userEntity.getId();
+    }
+
     public String getEmail() { return userEntity.getEmail(); }
 
     @Override

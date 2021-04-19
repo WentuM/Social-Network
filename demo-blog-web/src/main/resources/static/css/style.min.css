@@ -1142,3 +1142,20 @@ display_error {
 .comment__text {
     font-size: 16px
 }
+
+svg{
+    display: block;
+    width: 50px;
+    height: auto;
+}
+
+#svg_2{
+    fill:transparent;
+    stroke:#f00;
+    stroke-width:6px;
+    cursor:pointer;
+    transition:fill .3s;
+}
+#svg_2.filled{
+    fill:#f00;
+}

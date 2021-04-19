@@ -8,7 +8,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -36,8 +38,17 @@ public class PostEntity {
     @LastModifiedDate
     private Date updatedAt;
 
+    private String filename;
+
     @ManyToOne
     private UserEntity account;
+
+    @ManyToMany
+    @JoinTable(
+            name = "post_like",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "account_id"))
+    private Set<UserEntity> likePosts = new HashSet<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     public List<CommentEntity> comments;

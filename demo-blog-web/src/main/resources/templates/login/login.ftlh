@@ -35,6 +35,10 @@
                     <label for="password" class="input__label">Пароль</label>
                     <input type="password" id="password" name="password" class="input__field" required>
                 </div>
+                <label>
+                    <input type="checkbox" name="remember-me">
+                    Запомни меня
+                </label>
                 <div class="login-button">
                     <button class="login__btn" type="submit">Войти</button>
                 </div>

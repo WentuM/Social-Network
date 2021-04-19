@@ -4,6 +4,7 @@
 <html lang="en">
 <head>
     <title>Twitter</title>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="<@spring.url '/css/style.min.css'/>"/>
     <#import "../layout/head.ftlh" as s>
     <@s.head/>
@@ -40,11 +41,12 @@
                     </a>
 
                 </nav>
-                {#                <a href="#" class="nav__link--tweet">Твитнуть</a>#}
+                <a href="#" class="nav__link--tweet">Твитнуть</a>
                 <a href="/logout" class="nav__link--tweet">Выйти</a>
                 <div class="home__small-profile">
                     <div class="home__profile-image">
-                        <img src="<@spring.url '/images/default_profile_reasonably_small.png'/>" class="home__img" alt="">
+                        <img src="<@spring.url '/images/default_profile_reasonably_small.png'/>" class="home__img"
+                             alt="">
                     </div>
                     <div class="home__small-info">
                         <div class="small__profile-name">${username}
@@ -59,8 +61,8 @@
             <div class="block__head">
                 <h2 class="block__head--title">Главная</h2>
             </div>
-            <form action="/posts/savePost" method="post" class="block__write-tweet">
-<#--                {% csrf_token %}-->
+            <form action="/savePost" method="post" class="block__write-tweet" enctype="multipart/form-data">
+                <#--                {% csrf_token %}-->
                 <div class="write__tweter-inner">
                     <div class="write__tweet-image">
                         <img src="<@spring.url 'images/default_profile_reasonably_small.png'/>" class="write__tweet-img"
@@ -72,6 +74,9 @@
                     </div>
                 </div>
                 <div class="send__tweet">
+                    <input class="send__tweet-btn" type="file" name="file">
+                </div>
+                <div class="send__tweet">
                     <button class="send__tweet-btn" type="submit">
                         Твитнуть
                     </button>
@@ -79,35 +84,62 @@
             </form>
 
             <div class="tweet__items">
-                {% if twits %}
-                {% for twit in twits %}
-                <a href="{% url 'single_twit' twit.user_creator.user_id twit.pk%}" class="tweet__item">
-                    <div class="tweet__header">
-                        <div class="tweet__image">
-                            <img src="<@spring.url 'images/default_profile_reasonably_small.png'/>" alt=""
-                                 class="tweet__img">
+                <#list posts as post>
+                    <a class="tweet__item">
+                        <div class="tweet__header">
+                            <div class="tweet__image">
+                                <img src="<@spring.url 'images/default_profile_reasonably_small.png'/>" alt=""
+                                     class="tweet__img">
+                            </div>
+                            <div class="tweet__name-author">${post.accountDto.userName}</div>
+                            <div class="tweet__aliase-author">${post.accountDto.userEmail}</div>
+                            <div class="tweet__date-author">{{ twit.date | date:"M d,Y" }}</div>
                         </div>
-                        <div class="tweet__name-author">{{ twit.user_creator.username }}</div>
-                        <div class="tweet__aliase-author">@{{ twit.user_creator.user_id }}</div>
-                        <div class="tweet__date-author">{{ twit.date | date:"M d,Y" }}</div>
-                    </div>
-                    <div class="tweet__text">
-                        {{ twit.text }}
-                    </div>
+                        <div class="tweet__text">
+                            ${post.body}
+                        </div>
+                        <div>
+                            <#if post.filename??>
+                                <img src="<@spring.url 'images/${post.filename}'/>"
+                                     class="tweet__image__post" style="width: 100%">
+                            </#if>
+                        </div>
+                        <div style="margin-top: 10px">
+                            <form id="form" class="card-link" action="/likePost" method=post>
+                                <#--                                    {% csrf_token %}-->
+                                <#--                                    <p>Оценили: <span>{{ post.likes.all.count }}</span></p>-->
+<#--                                <input type="hidden" name="post_id" value="{{ post.id }}">-->
+                                <#--                                    {% if user not in post.likes.all %}-->
+                                <a id="no-like" onclick="document.getElementById('form${post.id}').submit();
+                                    return false;"><img src="<@spring.url 'images/unlike.png'/>"></a>
+                                <#--                                    {% else %}-->
+<#--                                <a href="#" id="like" onclick="document.getElementById('form${post.id}').submit();-->
+<#--                                    return false;"><img src="<@spring.url 'images/like.png'/>"></a>-->
+                                <#--                                    {% endif %}-->
+                            </form>
+                        </div>
 
-                    <button type="button" class="tweet__comment">
-                        <svg class="tweet__comment-icon">
-                            <use xlink:href="#comment"></use>
-                        </svg>
-                        <div class="tweet__reply">ответить</div>
-                    </button>
+                        <form action="/saveComment" method="post">
+                            <div class="write__tweet-field">
+                            <textarea name="text-tweet" class="write__tweet-text" id="" cols="30" rows="10"
+                                      placeholder="Написать комментарий"></textarea>
+                            </div>
+                            <button type="submit" class="tweet__comment">
+                                <svg class="tweet__comment-icon">
+                                    <use xlink:href="#comment"></use>
+                                </svg>
+                                <div class="tweet__reply">ответить</div>
+                            </button>
+                        </form>
 
-                </a>
-                {% endfor %}
-                {% endif %}
+                    </a>
+                <#else>
+                    No posts
+                </#list>
             </div>
         </div>
-        <div class="modal fade" id="ex" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="ex" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
             <div class="modal-dialog">
                 <form class="modal-content" method="post">
                     <div class="modal-header">
