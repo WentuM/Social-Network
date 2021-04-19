@@ -93,18 +93,21 @@ public class BlogPostService implements PostService {
                     postDTO.setAccountDto(modelMapper.map(postEntity.getAccount(), UserDTO.class));
                     return postDTO;
                 }).collect(Collectors.toList());
-
     }
 
-//    public List<PostDTO> findAllWithLike(UserDTO userDTO, PostDTO postDTO) {
+    public void findAllWithLike(UserDTO userDTO, PostDTO postDTO) {
+//        System.out.println(6);
 //        UserEntity userEntity = modelMapper.map(userDTO, UserEntity.class);
+//        System.out.println(7);
 //        PostEntity postEntity = modelMapper.map(postDTO, PostEntity.class);
 //        Set<UserEntity> likes = postEntity.getLikePosts();
+//        System.out.println(4);
 //        if (likes.contains(userEntity)) {
 //            likes.remove(userEntity);
 //        } else {
 //            likes.add(userEntity);
 //        }
-//        return postRepository.findAll(userEntity);
-//    }
+//        System.out.println(5);
+        postRepository.insertPostIdAndAccountId(postDTO.getId(), userDTO.getUserId());
+    }
 }

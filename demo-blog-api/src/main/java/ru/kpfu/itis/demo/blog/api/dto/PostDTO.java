@@ -3,6 +3,8 @@ package ru.kpfu.itis.demo.blog.api.dto;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 public class PostDTO {
@@ -13,6 +15,9 @@ public class PostDTO {
     private Date updatedAt;
     private String filename;
     private UserDTO accountDto;
+    private Set<UserDTO> likePosts;
+
+
 //    private Set<>
 //    private Long likes;
 //    private Boolean meLiked;

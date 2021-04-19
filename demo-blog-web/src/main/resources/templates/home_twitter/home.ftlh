@@ -105,16 +105,21 @@
                             </#if>
                         </div>
                         <div style="margin-top: 10px">
-                            <form id="form" class="card-link" action="/likePost" method=post>
+                            <form id="form" class="card-link" action="/likePost/${post.id}" method=post>
                                 <#--                                    {% csrf_token %}-->
-                                <#--                                    <p>Оценили: <span>{{ post.likes.all.count }}</span></p>-->
-<#--                                <input type="hidden" name="post_id" value="{{ post.id }}">-->
+                                <#if post.likePosts??>
+                                    <p>Оценили: <span>${post.likePosts?size}</span></p>
+                                </#if>
+                                <#--                                <input type="hidden" name="post_id" value="{{ post.id }}">-->
                                 <#--                                    {% if user not in post.likes.all %}-->
-                                <a id="no-like" onclick="document.getElementById('form${post.id}').submit();
-                                    return false;"><img src="<@spring.url 'images/unlike.png'/>"></a>
+<#--                                <a href="#" id="no-like" onclick="document.getElementById('form${post.id}').submit();-->
+<#--                                        return false;"><img src="<@spring.url 'images/unlike.png'/>"></a>-->
+                                <button class="send__tweet-btn" type="submit">
+                                    Твитнуть
+                                </button>
                                 <#--                                    {% else %}-->
-<#--                                <a href="#" id="like" onclick="document.getElementById('form${post.id}').submit();-->
-<#--                                    return false;"><img src="<@spring.url 'images/like.png'/>"></a>-->
+                                <#--                                <a href="#" id="like" onclick="document.getElementById('form${post.id}').submit();-->
+                                <#--                                    return false;"><img src="<@spring.url 'images/like.png'/>"></a>-->
                                 <#--                                    {% endif %}-->
                             </form>
                         </div>

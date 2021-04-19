@@ -59,11 +59,12 @@ public class PostController {
         return "redirect:/home";
     }
 
-//    @PostMapping("/likePost/{postDTO}")
-//    public String likePost(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model, @PathVariable PostDTO postDTO) {
-//        UserDTO userDTO = userService.findByEmail(userDetails.getEmail());
-//        blogPostService.findAllWithLike(userDTO, postDTO);
-////        userService.save(userDTO);
-//        return "redirect:/home";
-//    }
+    @PostMapping("/likePost/{postId}")
+    public String likePost(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model, @PathVariable Long postId) {
+        UserDTO userDTO = userService.findByEmail(userDetails.getEmail());
+        Optional<PostDTO> postDTO = blogPostService.findById(postId);
+        blogPostService.findAllWithLike(userDTO, postDTO.get());
+//        userService.save(userDTO);
+        return "redirect:/home";
+    }
 }
