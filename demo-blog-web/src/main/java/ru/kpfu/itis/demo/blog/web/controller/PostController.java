@@ -63,7 +63,11 @@ public class PostController {
     public String likePost(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model, @PathVariable Long postId) {
         UserDTO userDTO = userService.findByEmail(userDetails.getEmail());
         Optional<PostDTO> postDTO = blogPostService.findById(postId);
-        blogPostService.findAllWithLike(userDTO, postDTO.get());
+        try {
+            blogPostService.findAllWithLike(userDTO, postDTO.get());
+        } catch (Exception e) {
+            blogPostService.deleteAllWithLike(userDTO, postDTO.get());
+        }
 //        userService.save(userDTO);
         return "redirect:/home";
     }

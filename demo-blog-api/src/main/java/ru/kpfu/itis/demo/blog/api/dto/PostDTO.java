@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -15,6 +16,7 @@ public class PostDTO {
     private Date updatedAt;
     private String filename;
     private UserDTO accountDto;
+//    private List<CommentDTO> comments;
     private Set<UserDTO> likePosts;
 
 

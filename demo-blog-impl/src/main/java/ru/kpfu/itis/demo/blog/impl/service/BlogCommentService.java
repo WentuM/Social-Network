@@ -10,7 +10,9 @@ import ru.kpfu.itis.demo.blog.api.service.CommentService;
 import ru.kpfu.itis.demo.blog.impl.entity.CommentEntity;
 import ru.kpfu.itis.demo.blog.impl.jpa.repository.CommentRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BlogCommentService implements CommentService {
@@ -32,6 +34,12 @@ public class BlogCommentService implements CommentService {
     @Override
     public Page<CommentDTO> findAllByPostId(Long postId, Pageable pageable) {
         return commentRepository.findAllByPostId(postId, pageable).map(commentEntity -> modelMapper.map(commentEntity, CommentDTO.class));
+    }
+
+    @Override
+    public List<CommentDTO> findAllByPostIdList(Long postId) {
+        return commentRepository.findAllByPostIdList(postId).stream().map(
+                commentEntity -> modelMapper.map(commentEntity, CommentDTO.class)).collect(Collectors.toList());
     }
 
     @Override

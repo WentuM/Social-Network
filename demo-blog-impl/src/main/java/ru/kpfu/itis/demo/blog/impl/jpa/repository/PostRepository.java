@@ -25,6 +25,11 @@ public interface PostRepository extends JpaSpecificationExecutor<PostEntity>, Jp
     @Query(nativeQuery = true,  value = "INSERT INTO post_like (post_id, account_id) VALUES (:postId, :accountId)")
     void insertPostIdAndAccountId(@Param("postId") Long postId, @Param("accountId") Long accountId);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM post_like WHERE post_id = :postId and account_id = :accountId")
+    void deletePostIdAndAccountId(@Param("postId") Long postId, @Param("accountId") Long accountId);
+
     //    @Override
 //    @EntityGraph(value = "Post.Comments")
 //    Page<PostEntity> findAll(Pageable pageable);

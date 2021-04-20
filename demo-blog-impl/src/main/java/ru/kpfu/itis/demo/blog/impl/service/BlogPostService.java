@@ -58,7 +58,6 @@ public class BlogPostService implements PostService {
 
     @Override
     public Boolean save(PostDTO postDTO) {
-        //?
         postDTO.setId(null);
         PostEntity postEntity = modelMapper.map(postDTO, PostEntity.class);
         postRepository.save(postEntity);
@@ -109,5 +108,9 @@ public class BlogPostService implements PostService {
 //        }
 //        System.out.println(5);
         postRepository.insertPostIdAndAccountId(postDTO.getId(), userDTO.getUserId());
+    }
+
+    public void deleteAllWithLike(UserDTO userDTO, PostDTO postDTO) {
+        postRepository.deletePostIdAndAccountId(postDTO.getId(), userDTO.getUserId());
     }
 }

@@ -112,11 +112,16 @@
                                 </#if>
                                 <#--                                <input type="hidden" name="post_id" value="{{ post.id }}">-->
                                 <#--                                    {% if user not in post.likes.all %}-->
-<#--                                <a href="#" id="no-like" onclick="document.getElementById('form${post.id}').submit();-->
-<#--                                        return false;"><img src="<@spring.url 'images/unlike.png'/>"></a>-->
-                                <button class="send__tweet-btn" type="submit">
-                                    Твитнуть
-                                </button>
+                                <#--                                <a href="#" id="no-like" onclick="document.getElementById('form${post.id}').submit();-->
+                                <#--                                        return false;"><img src="<@spring.url 'images/unlike.png'/>"></a>-->
+                                <#if post.likePosts?seqContains(userDto)>
+                                    <button class="send__tweet-btn" type="submit">
+                                        Твитнуть
+                                    </button>
+                                <#else>
+                                    <a href="#" id="no-like" onclick="document.getElementById('form${post.id}').submit();
+                                               return false;"><img src="<@spring.url 'images/unlike.png'/>"></a>
+                                </#if>
                                 <#--                                    {% else %}-->
                                 <#--                                <a href="#" id="like" onclick="document.getElementById('form${post.id}').submit();-->
                                 <#--                                    return false;"><img src="<@spring.url 'images/like.png'/>"></a>-->
@@ -124,9 +129,9 @@
                             </form>
                         </div>
 
-                        <form action="/saveComment" method="post">
+                        <form action="/saveComment/${post.id}" method="post">
                             <div class="write__tweet-field">
-                            <textarea name="text-tweet" class="write__tweet-text" id="" cols="30" rows="10"
+                            <textarea name="text" class="write__tweet-text" id="" cols="30" rows="10"
                                       placeholder="Написать комментарий"></textarea>
                             </div>
                             <button type="submit" class="tweet__comment">
@@ -136,7 +141,19 @@
                                 <div class="tweet__reply">ответить</div>
                             </button>
                         </form>
-
+                        <#list comments as comment>
+                        <div>
+                            <div class="media-block">
+                                <a class="media-left" href="#"><img class="img-circle img-sm" alt="Профиль пользователя" src="https://bootstraptema.ru/snippets/icons/2016/mia/2.png"></a>
+                                <div class="media-body">
+                                    <div class="mar-btm">
+                                        <a href="#" class="btn-link text-semibold media-heading box-inline">Вася</a>
+                                        <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i> - 19-06-2016</p>
+                                    </div>
+                                    <p>Дада. С формой добавления нового комментария!</p>
+                                </div>
+                            </div>
+                        </div>
                     </a>
                 <#else>
                     No posts
