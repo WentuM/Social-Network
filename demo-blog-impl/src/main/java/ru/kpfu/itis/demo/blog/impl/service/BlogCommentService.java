@@ -38,7 +38,7 @@ public class BlogCommentService implements CommentService {
 
     @Override
     public List<CommentDTO> findAllByPostIdList(Long postId) {
-        return commentRepository.findAllByPostIdList(postId).stream().map(
+        return commentRepository.findAllByPostId(postId).stream().map(
                 commentEntity -> modelMapper.map(commentEntity, CommentDTO.class)).collect(Collectors.toList());
     }
 

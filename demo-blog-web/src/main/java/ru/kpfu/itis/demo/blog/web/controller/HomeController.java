@@ -46,6 +46,7 @@ public class HomeController {
         Iterable<PostDTO> posts = blogPostService.findAllProj();
         model.addAttribute("posts", posts);
 //        Iterable<CommentDTO> comments = blogCommentService.findAllByPostIdList();
+
         return "home_twitter/home";
     }
 }

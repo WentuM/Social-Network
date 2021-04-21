@@ -29,7 +29,7 @@
                             <span>Главная</span>
                         </div>
                     </a>
-                    <a href="/profile" class="nav__link">
+                    <a href="/profile/${userId}" class="nav__link">
                         <svg class="profile helper-color">
                             <use xlink:href="#profile"></use>
                         </svg>
@@ -39,7 +39,7 @@
                     </a>
 
                 </nav>
-                {#                <a href="#" class="nav__link--tweet">Твитнуть</a>#}
+                <a href="#" class="nav__link--tweet">Твитнуть</a>
                 <a href="/logout" class="nav__link--tweet">Выйти</a>
                 <div class="home__small-profile">
                     <div class="home__profile-image">
@@ -71,11 +71,11 @@
             <div class="profile__info">
                 <a href="/logout" class="profile__edit">
                     <span class="edit__text">Выйти из профиля</span></a>
-                <h1 class="profile__name">${username}</h1>
-                <div class="profile__alies">${email}</div>
+                <h1 class="profile__name">${user.userName}</h1>
+                <div class="profile__alies">${user.userEmail}</div>
                 <div class="profile__alies">Joined: {{ twitter_user.create_time | date:"Y.m.d" }}</div>
                 <div class="profile__count-tweets">
-                    <b class="profile__count">{{ count }}</b>
+                    <b class="profile__count">${user.}</b>
                     Твиты
                 </div>
             </div>

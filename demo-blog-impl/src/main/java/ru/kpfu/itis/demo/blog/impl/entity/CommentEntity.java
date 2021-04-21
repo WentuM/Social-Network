@@ -19,7 +19,7 @@ public class CommentEntity {
     @CreatedDate
     public Date createdDate;
 
-    @ManyToOne()
+    @ManyToOne
     private UserEntity account;
 
     @ManyToOne

@@ -16,7 +16,7 @@ public class PostDTO {
     private Date updatedAt;
     private String filename;
     private UserDTO accountDto;
-//    private List<CommentDTO> comments;
+    private List<CommentDTO> comments;
     private Set<UserDTO> likePosts;
 
 

@@ -31,7 +31,7 @@
                             <span>Главная</span>
                         </div>
                     </a>
-                    <a href="/profile" class="nav__link">
+                    <a href="/profile/${userDto.userId}" class="nav__link">
                         <svg class="profile helper-color">
                             <use xlink:href="#profile"></use>
                         </svg>
@@ -85,7 +85,7 @@
 
             <div class="tweet__items">
                 <#list posts as post>
-                    <a class="tweet__item">
+                    <div class="tweet__item">
                         <div class="tweet__header">
                             <div class="tweet__image">
                                 <img src="<@spring.url 'images/default_profile_reasonably_small.png'/>" alt=""
@@ -105,27 +105,19 @@
                             </#if>
                         </div>
                         <div style="margin-top: 10px">
-                            <form id="form" class="card-link" action="/likePost/${post.id}" method=post>
+                            <form id="form${post.id}" class="card-link" action="/likePost/${post.id}" method=post>
                                 <#--                                    {% csrf_token %}-->
                                 <#if post.likePosts??>
                                     <p>Оценили: <span>${post.likePosts?size}</span></p>
                                 </#if>
-                                <#--                                <input type="hidden" name="post_id" value="{{ post.id }}">-->
-                                <#--                                    {% if user not in post.likes.all %}-->
-                                <#--                                <a href="#" id="no-like" onclick="document.getElementById('form${post.id}').submit();-->
-                                <#--                                        return false;"><img src="<@spring.url 'images/unlike.png'/>"></a>-->
                                 <#if post.likePosts?seqContains(userDto)>
-                                    <button class="send__tweet-btn" type="submit">
-                                        Твитнуть
-                                    </button>
+                                    <div href="#" id="like" onclick="document.getElementById('form${post.id}').submit();
+                                            return false;"><img src="<@spring.url 'images/like.png'/>"></div>
                                 <#else>
-                                    <a href="#" id="no-like" onclick="document.getElementById('form${post.id}').submit();
-                                               return false;"><img src="<@spring.url 'images/unlike.png'/>"></a>
+                                    <div href="#" id="no-like"
+                                       onclick="document.getElementById('form${post.id}').submit();
+                                               return false;"><img src="<@spring.url 'images/unlike.png'/>"></div>
                                 </#if>
-                                <#--                                    {% else %}-->
-                                <#--                                <a href="#" id="like" onclick="document.getElementById('form${post.id}').submit();-->
-                                <#--                                    return false;"><img src="<@spring.url 'images/like.png'/>"></a>-->
-                                <#--                                    {% endif %}-->
                             </form>
                         </div>
 
@@ -141,20 +133,26 @@
                                 <div class="tweet__reply">ответить</div>
                             </button>
                         </form>
-                        <#list comments as comment>
-                        <div>
-                            <div class="media-block">
-                                <a class="media-left" href="#"><img class="img-circle img-sm" alt="Профиль пользователя" src="https://bootstraptema.ru/snippets/icons/2016/mia/2.png"></a>
-                                <div class="media-body">
-                                    <div class="mar-btm">
-                                        <a href="#" class="btn-link text-semibold media-heading box-inline">Вася</a>
-                                        <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i> - 19-06-2016</p>
+                        <#list post.comments as comment>
+                            <div>
+                                <div class="media-block" style="margin: 20px">
+                                    <div class="tweet__image">
+                                        <img src="<@spring.url 'images/default_profile_reasonably_small.png'/>" alt=""
+                                             class="tweet__img">
                                     </div>
-                                    <p>Дада. С формой добавления нового комментария!</p>
+                                    <div class="media-body">
+                                        <div class="mar-btm">
+                                            <a href="/home"
+                                               class="btn-link text-semibold media-heading box-inline">${post.accountDto.userName}  ${post.accountDto.userEmail}</a>
+                                            <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i> -
+                                                19-06-2016</p>
+                                            </div>
+                                        <p>${comment.text}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
+                        </#list>
+                    </div>
                 <#else>
                     No posts
                 </#list>

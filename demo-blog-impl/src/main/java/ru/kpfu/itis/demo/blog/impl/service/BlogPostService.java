@@ -61,7 +61,6 @@ public class BlogPostService implements PostService {
         postDTO.setId(null);
         PostEntity postEntity = modelMapper.map(postDTO, PostEntity.class);
         postRepository.save(postEntity);
-//        System.out.println(postEntity.getAccount().toString());
         return true;
     }
 
