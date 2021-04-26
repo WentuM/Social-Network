@@ -8,16 +8,28 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import ru.kpfu.itis.demo.blog.api.service.SignUpService;
+import ru.kpfu.itis.demo.blog.api.service.UserService;
+import ru.kpfu.itis.demo.blog.impl.service.UserServiceImpl;
+import ru.kpfu.itis.demo.blog.web.security.ouath2.CustomOAuth2User;
+import ru.kpfu.itis.demo.blog.web.security.ouath2.CustomOAuth2UserService;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.io.IOException;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableOAuth2Sso
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -40,6 +52,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/profile").authenticated()
                 .antMatchers("/single").authenticated()
                 .antMatchers("/static/**").permitAll()
+                .antMatchers("/geocode").permitAll()
+                .antMatchers("/oauth2").permitAll()
+                .antMatchers("/", "/signIn", "/oauth/**").permitAll()
+                .antMatchers("/followUser/**").permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/signIn")
@@ -47,13 +63,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/home")
                 .failureUrl("/signIn?error")
                 .and()
+                .oauth2Login().loginPage("/signIn").userInfoEndpoint().userService(oauthUserService)
+                .and()
+                .successHandler(new AuthenticationSuccessHandler() {
+                    @Override
+                    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+                        CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
+                        signUpService.signUpOauth(oAuth2User.getEmail(), oAuth2User.getName());
+                        httpServletResponse.sendRedirect("/home");
+                    }
+                })
+                .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID");
-//                .and()
-//                .rememberMe()
-//                .rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository());
+                .deleteCookies("JSESSIONID")
+                .and()
+                .rememberMe()
+                .rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository());
 
     }
 
@@ -68,4 +95,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         jdbcTokenRepository.setDataSource(dataSource);
         return jdbcTokenRepository;
     }
+
+    @Autowired
+    private CustomOAuth2UserService oauthUserService;
+
+    @Autowired
+    private SignUpService signUpService;
 }

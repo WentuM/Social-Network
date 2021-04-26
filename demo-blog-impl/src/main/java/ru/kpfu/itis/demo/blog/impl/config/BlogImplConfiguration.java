@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Configuration
-//@ComponentScan("ru.kpfu.itis.demo.blog.impl.repository")
 @ComponentScan({
         "ru.kpfu.itis.demo.blog.impl.service",
         "ru.kpfu.itis.demo.blog.impl.aspect"

@@ -10,6 +10,6 @@ public class CommentDTO {
     private Long id;
     private String text;
     private Date createdDate;
-    private Long postId;
-    private Long accountId;
+    private PostDTO post;
+    private UserDTO account;
 }

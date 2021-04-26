@@ -13,11 +13,15 @@ import java.util.Optional;
 @Component
 public class SignUpServiceImpl implements SignUpService {
 
-    @Autowired
-    private UsersRepository usersRepository;
+    private final UsersRepository usersRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    public SignUpServiceImpl(PasswordEncoder passwordEncoder, UsersRepository usersRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.usersRepository = usersRepository;
+    }
 
 
     @Override
@@ -33,8 +37,24 @@ public class SignUpServiceImpl implements SignUpService {
                 .name(userForm.getUsername())
                 .role(UserEntity.Role.USER)
                 .state(UserEntity.State.ACTIVE)
+                .provider(UserEntity.Provider.LOCAL)
                 .build();
         usersRepository.save(newUser);
         return true;
+    }
+
+    @Override
+    public void signUpOauth(String email, String name) {
+        Optional<UserEntity> userEntity = usersRepository.findByEmail(email);
+        if (!userEntity.isPresent()) {
+            UserEntity newUser = UserEntity.builder()
+                    .email(email)
+                    .name(name)
+                    .role(UserEntity.Role.USER)
+                    .state(UserEntity.State.ACTIVE)
+                    .provider(UserEntity.Provider.GOOGLE)
+                    .build();
+            usersRepository.save(newUser);
+        }
     }
 }

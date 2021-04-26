@@ -29,7 +29,7 @@
                             <span>Главная</span>
                         </div>
                     </a>
-                    <a href="/profile/${userId}" class="nav__link">
+                    <a href="/profile/${user.userId}" class="nav__link">
                         <svg class="profile helper-color">
                             <use xlink:href="#profile"></use>
                         </svg>
@@ -43,12 +43,13 @@
                 <a href="/logout" class="nav__link--tweet">Выйти</a>
                 <div class="home__small-profile">
                     <div class="home__profile-image">
-                        <img src="<@spring.url '/images/default_profile_reasonably_small.png'/>" class="home__img" alt="">
+                        <img src="<@spring.url '/images/default_profile_reasonably_small.png'/>" class="home__img"
+                             alt="">
                     </div>
                     <div class="home__small-info">
-                        <div class="small__profile-name">${username}
+                        <div class="small__profile-name">${user.userName}
                         </div>
-                        <div class="small__profile-alies">${email}
+                        <div class="small__profile-alies">${user.userEmail}
                         </div>
                     </div>
                 </div>
@@ -61,7 +62,7 @@
                         <use xlink:href="#arrow"></use>
                     </svg>
                 </a>
-                <h2 class="block__head--title">${username}</h2>
+                <h2 class="block__head--title">${user.userName}</h2>
             </div>
             <div class="profile__photo">
                 <div class="profile__circle--photo">
@@ -69,13 +70,30 @@
                 </div>
             </div>
             <div class="profile__info">
+                <#if user.userId == follower.userId>
                 <a href="/logout" class="profile__edit">
                     <span class="edit__text">Выйти из профиля</span></a>
-                <h1 class="profile__name">${user.userName}</h1>
-                <div class="profile__alies">${user.userEmail}</div>
+                </#if>
+                <form id="form${follower.userId}" action="/followUser/${follower.userId}" method=post>
+                <#if user.userId != follower.userId>
+                    <#if user.followUser?seqContains(follower)>
+                        <a href="#" class="profile__edit"
+                            onclick="document.getElementById('form${follower.userId}').submit();
+                                return false;">
+                            <span class="edit__text">Отписаться</span></a>
+                    <#else>
+                        <a href="#" class="profile__edit"
+                           onclick="document.getElementById('form${follower.userId}').submit();
+                                return false;">
+                            <span class="edit__text">Подписаться</span></a>
+                    </#if>
+                </#if>
+                </form>
+                <h1 class="profile__name">${follower.userName}</h1>
+                <div class="profile__alies">${follower.userEmail}</div>
                 <div class="profile__alies">Joined: {{ twitter_user.create_time | date:"Y.m.d" }}</div>
                 <div class="profile__count-tweets">
-                    <b class="profile__count">${user.}</b>
+                    <b class="profile__count">{{ count }}</b>
                     Твиты
                 </div>
             </div>
@@ -91,8 +109,8 @@
                             <img src="<@spring.url '/images/default_profile_reasonably_small.png'/>" alt=""
                                  class="tweet__img">
                         </div>
-                        <div class="tweet__name-author">${username}</div>
-                        <div class="tweet__aliase-author">${email}</div>
+                        <div class="tweet__name-author">${user.userName}</div>
+                        <div class="tweet__aliase-author">${user.userEmail}</div>
                         <div class="tweet__date-author">{{ twit.date | date:"M d,Y" }}</div>
                     </div>
                     <div class="tweet__text">

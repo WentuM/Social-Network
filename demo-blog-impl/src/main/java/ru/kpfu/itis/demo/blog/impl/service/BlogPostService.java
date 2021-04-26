@@ -16,9 +16,7 @@ import ru.kpfu.itis.demo.blog.impl.jpa.repository.PostRepository;
 import ru.kpfu.itis.demo.blog.impl.jpa.repository.UsersRepository;
 import ru.kpfu.itis.demo.blog.impl.jpa.repository.projection.OnlyTittlePost;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -75,14 +73,34 @@ public class BlogPostService implements PostService {
         return false;
     }
 
-    public Page<PostDTO> findAllByName(String name, Pageable pageable) {
-        if (StringUtils.hasLength(name)) {
-            return postRepository.findAllByTittle(name, pageable)
-                    .map(postEntity -> modelMapper.map(postEntity, PostDTO.class));
-        } else {
-            return this.findAll(pageable);
-        }
-    }
+//    public Page<PostDTO> findAllByName(String name, Pageable pageable) {
+//        if (StringUtils.hasLength(name)) {
+//            return postRepository.findAllByTittle(name, pageable)
+//                    .map(postEntity -> modelMapper.map(postEntity, PostDTO.class));
+//        } else {
+//            return this.findAll(pageable);
+//        }
+//    }
+
+
+//    public List<PostDTO> findAllPostByFollowers(Set<UserDTO> usersDTO) {
+////        Set<UserEntity> postFollowersEntity = postFollowers.stream().map(userDTO -> modelMapper.map(userDTO, UserEntity.class)).collect(Collectors.toSet());
+////        return postRepository.findPostEntitiesByAccountFollowUser(postFollowersEntity).stream().map(
+////                postEntity -> {
+////                    PostDTO postDTO = modelMapper.map(postEntity, PostDTO.class);
+////                    postDTO.setAccountDto(modelMapper.map(postEntity.getAccount(), UserDTO.class));
+////                    return postDTO;
+////                }).collect(Collectors.toList());
+//        ArrayList<Long> usersId = new ArrayList<>();
+//        for (UserDTO userDTO : usersDTO
+//        ) {
+//            usersId.add(userDTO.getUserId());
+//        }
+//        System.out.println(usersId.toString());
+//        return postRepository.findPostEntitiesByAccountFollowUserId(usersId).stream().map(
+//                postEntity -> modelMapper.map(postEntity, PostDTO.class)
+//        ).collect(Collectors.toList());
+//    }
 
     public List<PostDTO> findAllProj() {
         return postRepository.findAllByIdIsNotNull().stream().map(
@@ -93,19 +111,16 @@ public class BlogPostService implements PostService {
                 }).collect(Collectors.toList());
     }
 
+    public List<PostDTO> findAllByAccountId(Long accountId) {
+        return postRepository.findAllByAccount_Id(accountId).stream().map(
+                postEntity -> {
+                    PostDTO postDTO = modelMapper.map(postEntity, PostDTO.class);
+                    postDTO.setAccountDto(modelMapper.map(postEntity.getAccount(), UserDTO.class));
+                    return postDTO;
+                }).collect(Collectors.toList());
+    }
+
     public void findAllWithLike(UserDTO userDTO, PostDTO postDTO) {
-//        System.out.println(6);
-//        UserEntity userEntity = modelMapper.map(userDTO, UserEntity.class);
-//        System.out.println(7);
-//        PostEntity postEntity = modelMapper.map(postDTO, PostEntity.class);
-//        Set<UserEntity> likes = postEntity.getLikePosts();
-//        System.out.println(4);
-//        if (likes.contains(userEntity)) {
-//            likes.remove(userEntity);
-//        } else {
-//            likes.add(userEntity);
-//        }
-//        System.out.println(5);
         postRepository.insertPostIdAndAccountId(postDTO.getId(), userDTO.getUserId());
     }
 

@@ -12,13 +12,17 @@ import ru.kpfu.itis.demo.blog.impl.jpa.repository.projection.OnlyTittlePost;
 import ru.kpfu.itis.demo.blog.impl.entity.PostEntity;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public interface PostRepository extends JpaSpecificationExecutor<PostEntity>, JpaRepository<PostEntity, Long> {
-    Page<PostEntity> findAllByTittle(String name, Pageable pageable);
+//    Page<PostEntity> findAllByTittle(String name, Pageable pageable);
 
 
     List<PostEntity> findAllByIdIsNotNull();
+    List<PostEntity> findAllByAccount_Id(Long accountId);
+//    List<PostEntity> findPostEntitiesByAccountFollowUserId(ArrayList<Long> account_followUser);
 
     @Transactional
     @Modifying
@@ -29,20 +33,4 @@ public interface PostRepository extends JpaSpecificationExecutor<PostEntity>, Jp
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM post_like WHERE post_id = :postId and account_id = :accountId")
     void deletePostIdAndAccountId(@Param("postId") Long postId, @Param("accountId") Long accountId);
-
-    //    @Override
-//    @EntityGraph(value = "Post.Comments")
-//    Page<PostEntity> findAll(Pageable pageable);
-//    @Query("select new ru.kpfu.itis.demo.blog.api.dto.PostDTO(" +
-//            "   m, " +
-//            "   count(ml), " +
-//            "   (sum(case when ml = :user then 1 else 0 end) > 0)" +
-//            ") " +
-//            "from PostEntity m left join m.likePosts ml " +
-//            "group by m")
-//    List<PostDTO> findAll(@Param("user_id") Long id);
-
-
-//    @EntityGraph(value = "Post.Comments")
-//    List<PostEntity> findAllWithout();
 }

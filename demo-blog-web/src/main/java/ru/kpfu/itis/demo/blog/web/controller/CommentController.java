@@ -15,6 +15,11 @@ import ru.kpfu.itis.demo.blog.api.service.UserService;
 import ru.kpfu.itis.demo.blog.impl.service.BlogPostService;
 import ru.kpfu.itis.demo.blog.web.security.UserDetailsImpl;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Optional;
+
 @Controller
 public class CommentController {
 
@@ -32,12 +37,13 @@ public class CommentController {
 
     @PostMapping("/saveComment/{postId}")
     public String addCommentByPostId(@AuthenticationPrincipal UserDetailsImpl userDetails,@ModelAttribute CommentDTO commentDTO, Model model, @PathVariable Long postId) {
-//        UserDTO userDTO = userService.findByEmail(userDetails.getEmail());
-//        PostDTO postDTO = blogPostService.findById(postId).get();
-        commentDTO.setAccountId(userDetails.getId());
-//        System.out.println(userDetails.getId());
-        commentDTO.setPostId(postId);
-//        System.out.println(postId);
+
+        UserDTO userDTO = userService.findByEmail(userDetails.getEmail()).get();
+        PostDTO postDTO = blogPostService.findById(postId).get();
+        commentDTO.setAccount(userDTO);
+        commentDTO.setPost(postDTO);
+        Date date = new Date();
+        commentDTO.setCreatedDate(date);
         commentService.save(commentDTO);
         return "redirect:/home";
     }

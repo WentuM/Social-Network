@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -38,12 +39,26 @@ public class UserEntity {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @ManyToMany
+    @JoinTable(
+            name = "account_followers",
+            joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "follower_id"))
+    private Set<UserEntity> followUser = new HashSet<>();
+
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
+
     public enum State {
         ACTIVE, BANNED
     }
 
     public enum Role {
         USER, ADMIN
+    }
+
+    public enum Provider {
+        LOCAL, GOOGLE
     }
 
     public boolean isActive() {

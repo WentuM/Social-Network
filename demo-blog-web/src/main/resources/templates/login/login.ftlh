@@ -4,6 +4,7 @@
 <head>
     <title>Twitter</title>
     <link rel="stylesheet" href="<@spring.url '/css/style.min.css'/>"/>
+    <meta name="google-signin-client_id" content="848089175300-lence6iue2dtvsoa2n21p9b8gr9n5815.apps.googleusercontent.com">
     <#import "../layout/head.ftlh" as s>
     <@s.head/>
 </head>
@@ -11,7 +12,7 @@
 <#import "../layout/sprite.ftl" as m>
 <@m.sprite/>
 
-<script src="/static/js/vue.js"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 <section class="login">
     <div class="login__container">
         <div class="login__inner">
@@ -44,16 +45,14 @@
                 </div>
             </form>
             <a href="/signUp" class="login__link">- Зарегистрироваться в Твиттере -</a>
+            <a class="btn btn-outline-dark" href="/oauth2/authorization/google" role="button" style="text-transform:none">
+                <img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+                Login with Google
+            </a>
         </div>
     </div>
 </section>
-<script>
-    let app = Vue.createApp({
-
-    });
-
-    app.mount('')
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 <script src="/static/js/app.js"></script>
 </body>
 </html>

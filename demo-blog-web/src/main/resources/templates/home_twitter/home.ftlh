@@ -49,9 +49,9 @@
                              alt="">
                     </div>
                     <div class="home__small-info">
-                        <div class="small__profile-name">${username}
+                        <div class="small__profile-name">${userDto.userName}
                         </div>
-                        <div class="small__profile-alies">${email}
+                        <div class="small__profile-alies">${userDto.userEmail}
                         </div>
                     </div>
                 </div>
@@ -93,7 +93,80 @@
                             </div>
                             <div class="tweet__name-author">${post.accountDto.userName}</div>
                             <div class="tweet__aliase-author">${post.accountDto.userEmail}</div>
-                            <div class="tweet__date-author">{{ twit.date | date:"M d,Y" }}</div>
+                            <div class="tweet__date-author">${post.createdAt}</div>
+                        </div>
+                        <div class="tweet__text">
+                            ${post.body}
+                        </div>
+                        <div>
+                            <#if post.filename??>
+                                <img src="<@spring.url 'images/${post.filename}'/>"
+                                     class="tweet__image__post" style="width: 100%">
+                            </#if>
+                        </div>
+                        <div style="margin-top: 10px">
+                            <form id="form${post.id}" class="card-link" action="/likePost/${post.id}" method=post>
+                                <#--                                    {% csrf_token %}-->
+                                <#if post.likePosts??>
+                                    <p>Оценили: <span>${post.likePosts?size}</span></p>
+                                </#if>
+                                <#if post.likePosts?seqContains(userDto)>
+                                    <div href="#" id="like" onclick="document.getElementById('form${post.id}').submit();
+                                            return false;"><img src="<@spring.url 'images/like.png'/>"></div>
+                                <#else>
+                                    <div href="#" id="no-like"
+                                         onclick="document.getElementById('form${post.id}').submit();
+                                                 return false;"><img src="<@spring.url 'images/unlike.png'/>"></div>
+                                </#if>
+                            </form>
+                        </div>
+
+                        <form action="/saveComment/${post.id}" method="post">
+                            <div class="write__tweet-field">
+                            <textarea name="text" class="write__tweet-text" id="" cols="30" rows="10"
+                                      placeholder="Написать комментарий"></textarea>
+                            </div>
+                            <button type="submit" class="tweet__comment">
+                                <svg class="tweet__comment-icon">
+                                    <use xlink:href="#comment"></use>
+                                </svg>
+                                <div class="tweet__reply">ответить</div>
+                            </button>
+                        </form>
+                        <#list post.comments as comment>
+                            <div>
+                                <div class="media-block" style="margin: 20px">
+                                    <div class="tweet__image">
+                                        <img src="<@spring.url 'images/default_profile_reasonably_small.png'/>" alt=""
+                                             class="tweet__img">
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="mar-btm">
+                                            <a href="/profile/${comment.account.userId}"
+                                               class="btn-link text-semibold media-heading box-inline">${comment.account.userName}  ${comment.account.userEmail}</a>
+                                            <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i>
+                                                - ${comment.createdDate}</p>
+                                        </div>
+                                        <p>${comment.text}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </#list>
+                    </div>
+                </#list>
+            </div>
+
+            <div class="tweet__items">
+                <#list postFollowers as post>
+                    <div class="tweet__item">
+                        <div class="tweet__header">
+                            <div class="tweet__image">
+                                <img src="<@spring.url 'images/default_profile_reasonably_small.png'/>" alt=""
+                                     class="tweet__img">
+                            </div>
+                            <div class="tweet__name-author">${post.accountDto.userName}</div>
+                            <div class="tweet__aliase-author">${post.accountDto.userEmail}</div>
+                            <div class="tweet__date-author">${post.createdAt}</div>
                         </div>
                         <div class="tweet__text">
                             ${post.body}
@@ -142,10 +215,10 @@
                                     </div>
                                     <div class="media-body">
                                         <div class="mar-btm">
-                                            <a href="/home"
-                                               class="btn-link text-semibold media-heading box-inline">${post.accountDto.userName}  ${post.accountDto.userEmail}</a>
-                                            <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i> -
-                                                19-06-2016</p>
+                                            <a href="/profile/${comment.account.userId}"
+                                               class="btn-link text-semibold media-heading box-inline">${comment.account.userName}  ${comment.account.userEmail}</a>
+                                            <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i>
+                                                - ${comment.createdDate}</p>
                                             </div>
                                         <p>${comment.text}</p>
                                     </div>
@@ -153,10 +226,9 @@
                             </div>
                         </#list>
                     </div>
-                <#else>
-                    No posts
                 </#list>
             </div>
+
         </div>
         <div class="modal fade" id="ex" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">

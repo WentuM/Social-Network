@@ -19,6 +19,7 @@ import javax.annotation.security.PermitAll;
 import javax.mail.Session;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -53,15 +54,17 @@ public class PostController {
             file.transferTo(new File(uploadPath + "/" + resultFilename));
             postDTO.setFilename(resultFilename);
         }
-        UserDTO userDTO = userService.findByEmail(userDetails.getEmail());
+        Date date = new Date();
+        UserDTO userDTO = userService.findByEmail(userDetails.getEmail()).get();
         postDTO.setAccountDto(userDTO);
+        postDTO.setCreatedAt(date);
         blogPostService.save(postDTO);
         return "redirect:/home";
     }
 
     @PostMapping("/likePost/{postId}")
     public String likePost(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model, @PathVariable Long postId) {
-        UserDTO userDTO = userService.findByEmail(userDetails.getEmail());
+        UserDTO userDTO = userService.findByEmail(userDetails.getEmail()).get();
         Optional<PostDTO> postDTO = blogPostService.findById(postId);
         try {
             blogPostService.findAllWithLike(userDTO, postDTO.get());

@@ -31,7 +31,6 @@ public class PostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String tittle;
     private String body;
     @CreatedDate
     private Date createdAt;
