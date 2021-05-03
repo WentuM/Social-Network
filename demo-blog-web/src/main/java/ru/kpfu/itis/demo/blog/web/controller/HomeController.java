@@ -50,16 +50,13 @@ public class HomeController {
 
         model.addAttribute("userDto", userDTO);
 
-        Iterable<PostDTO> posts = blogPostService.findAllByAccountId(userDTO.getUserId());
-        model.addAttribute("posts", posts);
-
-        ArrayList<PostDTO> postFollowers = new ArrayList<>();
+        ArrayList<PostDTO> posts = (ArrayList<PostDTO>) blogPostService.findAllByAccountId(userDTO.getUserId());
         for (UserDTO accountDTO: userDTO.getFollowUser()
              ) {
             ArrayList<PostDTO> postsByAccount = (ArrayList<PostDTO>) blogPostService.findAllByAccountId(accountDTO.getUserId());
-            postFollowers.addAll(postsByAccount);
+            posts.addAll(postsByAccount);
         }
-        model.addAttribute("postFollowers", postFollowers);
+        model.addAttribute("posts", posts);
         return "home_twitter/home";
     }
 }

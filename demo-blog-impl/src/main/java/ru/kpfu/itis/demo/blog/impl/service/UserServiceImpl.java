@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kpfu.itis.demo.blog.api.dto.UserDTO;
 import ru.kpfu.itis.demo.blog.api.service.UserService;
@@ -17,6 +18,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UsersRepository usersRepository;
     private final ModelMapper modelMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
@@ -69,5 +72,16 @@ public class UserServiceImpl implements UserService {
 
     public void deleteFollowOnUser(UserDTO userDTO, UserDTO followerDTO) {
         usersRepository.deleteAccountIdAndFollowerId(userDTO.getUserId(), followerDTO.getUserId());
+    }
+
+    @Override
+    public UserDTO findByEmailAndPassword(String email, String password) {
+        UserDTO userDTO = findByEmail(email).get();
+        if (userDTO != null) {
+            if (passwordEncoder.matches(password, userDTO.getPassword())) {
+                return userDTO;
+            }
+        }
+        return null;
     }
 }

@@ -8,16 +8,19 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.kpfu.itis.demo.blog.api.service.SignUpService;
 import ru.kpfu.itis.demo.blog.api.service.UserService;
 import ru.kpfu.itis.demo.blog.impl.service.UserServiceImpl;
+import ru.kpfu.itis.demo.blog.web.security.config.jwt.JwtFilter;
 import ru.kpfu.itis.demo.blog.web.security.ouath2.CustomOAuth2User;
 import ru.kpfu.itis.demo.blog.web.security.ouath2.CustomOAuth2UserService;
 
@@ -42,9 +45,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    @Autowired
+    private JwtFilter jwtFilter;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+        http.httpBasic().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
                 .antMatchers("/signUp").anonymous()
                 .antMatchers("/signIn").anonymous()
@@ -56,6 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/oauth2").permitAll()
                 .antMatchers("/", "/signIn", "/oauth/**").permitAll()
                 .antMatchers("/followUser/**").permitAll()
+                .antMatchers("/auth").permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/signIn")
@@ -80,7 +89,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID")
                 .and()
                 .rememberMe()
-                .rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository());
+                .rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository())
+        .and()
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 

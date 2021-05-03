@@ -14,6 +14,7 @@ import ru.kpfu.itis.demo.blog.impl.entity.PostEntity;
 import ru.kpfu.itis.demo.blog.impl.entity.UserEntity;
 import ru.kpfu.itis.demo.blog.impl.service.BlogPostService;
 import ru.kpfu.itis.demo.blog.web.security.UserDetailsImpl;
+import ru.kpfu.itis.demo.blog.web.security.ouath2.CustomOAuth2User;
 
 import javax.annotation.security.PermitAll;
 import javax.mail.Session;
@@ -41,7 +42,7 @@ public class PostController {
 
     @PermitAll
     @PostMapping("/savePost")
-    public String saveNewPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @ModelAttribute PostDTO postDTO, @RequestParam("file") MultipartFile file) throws IOException {
+    public String saveNewPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @AuthenticationPrincipal CustomOAuth2User customOAuth2User, @ModelAttribute PostDTO postDTO, @RequestParam("file") MultipartFile file) throws IOException {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
 
@@ -54,8 +55,14 @@ public class PostController {
             file.transferTo(new File(uploadPath + "/" + resultFilename));
             postDTO.setFilename(resultFilename);
         }
+        UserDTO userDTO;
+        if (userDetails == null) {
+            userDTO = userService.findByEmail(customOAuth2User.getEmail()).get();
+        } else {
+            userDTO = userService.findByEmail(userDetails.getEmail()).get();
+        }
         Date date = new Date();
-        UserDTO userDTO = userService.findByEmail(userDetails.getEmail()).get();
+//        UserDTO userDTO = userService.findByEmail(userDetails.getEmail()).get();
         postDTO.setAccountDto(userDTO);
         postDTO.setCreatedAt(date);
         blogPostService.save(postDTO);
@@ -63,8 +70,14 @@ public class PostController {
     }
 
     @PostMapping("/likePost/{postId}")
-    public String likePost(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model, @PathVariable Long postId) {
-        UserDTO userDTO = userService.findByEmail(userDetails.getEmail()).get();
+    public String likePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @AuthenticationPrincipal CustomOAuth2User customOAuth2User, Model model, @PathVariable Long postId) {
+        UserDTO userDTO;
+        if (userDetails == null) {
+            userDTO = userService.findByEmail(customOAuth2User.getEmail()).get();
+        } else {
+            userDTO = userService.findByEmail(userDetails.getEmail()).get();
+        }
+//        UserDTO userDTO = userService.findByEmail(userDetails.getEmail()).get();
         Optional<PostDTO> postDTO = blogPostService.findById(postId);
         try {
             blogPostService.findAllWithLike(userDTO, postDTO.get());

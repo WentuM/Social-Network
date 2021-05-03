@@ -11,6 +11,7 @@ import ru.kpfu.itis.demo.blog.api.dto.PostDTO;
 import ru.kpfu.itis.demo.blog.api.dto.UserDTO;
 import ru.kpfu.itis.demo.blog.api.service.UserService;
 import ru.kpfu.itis.demo.blog.web.security.UserDetailsImpl;
+import ru.kpfu.itis.demo.blog.web.security.ouath2.CustomOAuth2User;
 
 import java.util.Optional;
 
@@ -21,8 +22,14 @@ public class ProfileController {
     public UserService userService;
 
     @GetMapping("/profile/{userId}")
-    public String getSignUpPage(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model, @PathVariable Long userId) {
-        UserDTO userDTO = userService.findById(userDetails.getId()).get();
+    public String getSignUpPage(@AuthenticationPrincipal UserDetailsImpl userDetails, @AuthenticationPrincipal CustomOAuth2User customOAuth2User, Model model, @PathVariable Long userId) {
+        UserDTO userDTO;
+        if (userDetails == null) {
+            userDTO = userService.findByEmail(customOAuth2User.getEmail()).get();
+        } else {
+            userDTO = userService.findByEmail(userDetails.getEmail()).get();
+        }
+//        UserDTO userDTO = userService.findById(userDetails.getId()).get();
         model.addAttribute("user", userDTO);
         UserDTO followerDTO = userService.findById(userId).get();
         model.addAttribute("follower", followerDTO);
@@ -30,8 +37,14 @@ public class ProfileController {
     }
 
     @PostMapping("/followUser/{followId}")
-    public String followUser(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model, @PathVariable Long followId) {
-        UserDTO userDTO = userService.findByEmail(userDetails.getEmail()).get();
+    public String followUser(@AuthenticationPrincipal UserDetailsImpl userDetails, @AuthenticationPrincipal CustomOAuth2User customOAuth2User, Model model, @PathVariable Long followId) {
+        UserDTO userDTO;
+        if (userDetails == null) {
+            userDTO = userService.findByEmail(customOAuth2User.getEmail()).get();
+        } else {
+            userDTO = userService.findByEmail(userDetails.getEmail()).get();
+        }
+//        UserDTO userDTO = userService.findByEmail(userDetails.getEmail()).get();
         UserDTO followerDTO = userService.findById(followId).get();
         try {
             userService.followOnUser(userDTO, followerDTO);
