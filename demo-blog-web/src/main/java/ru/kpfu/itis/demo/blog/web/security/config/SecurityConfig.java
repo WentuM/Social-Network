@@ -3,6 +3,7 @@ package ru.kpfu.itis.demo.blog.web.security.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -51,8 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic().disable()
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .csrf().disable();
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
                 .antMatchers("/signUp").anonymous()
                 .antMatchers("/signIn").anonymous()
@@ -64,7 +65,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/oauth2").permitAll()
                 .antMatchers("/", "/signIn", "/oauth/**").permitAll()
                 .antMatchers("/followUser/**").permitAll()
-                .antMatchers("/auth").permitAll()
+                //api
+                .antMatchers("/api/posts/**").hasRole("USER")
+                .antMatchers("/api/auth").permitAll()
+                .antMatchers("/api/profile/**").hasRole("USER")
                 .and()
                 .formLogin()
                 .loginPage("/signIn")
@@ -86,12 +90,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .and()
-                .rememberMe()
-                .rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository())
-        .and()
-        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .deleteCookies("JSESSIONID");
+//                .and()
+//                .rememberMe()
+//                .rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository())
+//                .and()
+//                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 
@@ -112,4 +116,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private SignUpService signUpService;
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 }

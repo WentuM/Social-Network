@@ -56,7 +56,7 @@ public class PostRestController {
                 .orElseThrow(() -> new PostNotFoundException("Post not found"));
     }
 
-    @PutMapping
+    @PatchMapping
     public void updatePost(@RequestBody PostDTO postDTO, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody String newText) {
         postDTO.setBody(newText);
         Date date = new Date();

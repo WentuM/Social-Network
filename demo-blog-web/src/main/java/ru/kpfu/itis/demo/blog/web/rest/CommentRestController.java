@@ -19,7 +19,7 @@ import ru.kpfu.itis.demo.blog.web.security.ouath2.CustomOAuth2User;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/posts/{postId}/comments")
+@RequestMapping("api/posts/{postId}/comments")
 public class CommentRestController {
 
     private final CommentService commentService;
