@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.kpfu.itis.demo.blog.api.dto.PostDTO;
 import ru.kpfu.itis.demo.blog.api.dto.UserDTO;
 import ru.kpfu.itis.demo.blog.api.service.UserService;
@@ -29,7 +27,6 @@ public class ProfileController {
         } else {
             userDTO = userService.findByEmail(userDetails.getEmail()).get();
         }
-//        UserDTO userDTO = userService.findById(userDetails.getId()).get();
         model.addAttribute("user", userDTO);
         UserDTO followerDTO = userService.findById(userId).get();
         model.addAttribute("follower", followerDTO);
@@ -44,7 +41,6 @@ public class ProfileController {
         } else {
             userDTO = userService.findByEmail(userDetails.getEmail()).get();
         }
-//        UserDTO userDTO = userService.findByEmail(userDetails.getEmail()).get();
         UserDTO followerDTO = userService.findById(followId).get();
         try {
             userService.followOnUser(userDTO, followerDTO);
@@ -52,5 +48,25 @@ public class ProfileController {
             userService.deleteFollowOnUser(userDTO, followerDTO);
         }
         return "redirect:/home";
+    }
+
+    @RequestMapping(value="/ajax/followUser/{followId}", method = RequestMethod.POST)
+    public @ResponseBody String followAjaxUser(@AuthenticationPrincipal UserDetailsImpl userDetails, @AuthenticationPrincipal CustomOAuth2User customOAuth2User, @PathVariable Long followId) {
+        UserDTO userDTO;
+        if (userDetails == null) {
+            userDTO = userService.findByEmail(customOAuth2User.getEmail()).get();
+        } else {
+            userDTO = userService.findByEmail(userDetails.getEmail()).get();
+        }
+        String result = "";
+        UserDTO followerDTO = userService.findById(followId).get();
+        try {
+            userService.followOnUser(userDTO, followerDTO);
+            result = "true";
+        } catch (Exception e) {
+            userService.deleteFollowOnUser(userDTO, followerDTO);
+            result = "false";
+        }
+        return result;
     }
 }

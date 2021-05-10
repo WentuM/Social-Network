@@ -69,12 +69,12 @@
                              alt="">
                     </div>
                     <div class="write__tweet-field">
-                    <textarea name="body" class="write__tweet-text" id="" cols="30" rows="10"
+                    <textarea name="body" class="write__tweet-text" id="textPost" cols="30" rows="10"
                               placeholder="Расскажи что случилось?"></textarea>
                     </div>
                 </div>
                 <div class="send__tweet">
-                    <input class="send__tweet-btn" type="file" name="file">
+                    <input class="send__tweet-btn" id="imagePost" type="file" name="file">
                 </div>
                 <div class="send__tweet">
                     <button class="send__tweet-btn" type="submit">

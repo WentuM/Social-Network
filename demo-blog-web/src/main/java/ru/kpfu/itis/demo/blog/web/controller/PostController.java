@@ -62,12 +62,40 @@ public class PostController {
             userDTO = userService.findByEmail(userDetails.getEmail()).get();
         }
         Date date = new Date();
-//        UserDTO userDTO = userService.findByEmail(userDetails.getEmail()).get();
         postDTO.setAccountDto(userDTO);
         postDTO.setCreatedAt(date);
         blogPostService.save(postDTO);
         return "redirect:/home";
     }
+
+//    @RequestMapping(value="/ajax/savePost", method = RequestMethod.POST)
+//    public @ResponseBody PostDTO saveAjaxNewPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @AuthenticationPrincipal CustomOAuth2User customOAuth2User, @RequestBody PostDTO postDTO, @RequestParam("file") MultipartFile file) throws IOException {
+//        if (file != null && !file.getOriginalFilename().isEmpty()) {
+//            File uploadDir = new File(uploadPath);
+//
+//            if (!uploadDir.exists()) {
+//                uploadDir.mkdir();
+//            }
+//
+//            String uuidFile = UUID.randomUUID().toString();
+//            String resultFilename = uuidFile + "." + file.getOriginalFilename();
+//            file.transferTo(new File(uploadPath + "/" + resultFilename));
+//            postDTO.setFilename(resultFilename);
+//        }
+//        UserDTO userDTO;
+//        if (userDetails == null) {
+//            userDTO = userService.findByEmail(customOAuth2User.getEmail()).get();
+//        } else {
+//            userDTO = userService.findByEmail(userDetails.getEmail()).get();
+//        }
+//        Date date = new Date();
+//        postDTO.setAccountDto(userDTO);
+//        postDTO.setCreatedAt(date);
+//        blogPostService.save(postDTO);
+//        return postDTO;
+//    }
+
+
 
     @PostMapping("/likePost/{postId}")
     public String likePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @AuthenticationPrincipal CustomOAuth2User customOAuth2User, Model model, @PathVariable Long postId) {

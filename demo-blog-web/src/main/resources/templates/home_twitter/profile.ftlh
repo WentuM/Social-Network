@@ -6,6 +6,40 @@
     <link rel="stylesheet" href="<@spring.url '/css/style.min.css'/>"/>
     <#import "../layout/head.ftlh" as s>
     <@s.head/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js" charset="utf-8"></script>
+    <script>
+
+        function updateFeed(flag, divElement) {
+            let htmlElement = '';
+            htmlElement += '<#if user.userId != follower.userId>';
+                if (flag == true) {
+                    htmlElement += '<a href="#" class="profile__edit" onclick="sendAjax(${follower.userId}); return false;">';
+                    htmlElement += '<span class="edit__text">Отписаться</span></a>';
+                } else {
+                    htmlElement += '<a href="#" class="profile__edit" onclick="sendAjax(${follower.userId}); return false;">';
+                    htmlElement += '<span class="edit__text">Подписаться</span></a>';
+                }
+                htmlElement += '</#if>';
+            divElement.html(htmlElement);
+        }
+
+        function sendAjax(text) {
+            let data = {
+                "userId": text
+            };
+            $.ajax({
+                type: "POST",
+                url: "/ajax/followUser/" + text,
+                data: JSON.stringify(data),
+                success: function (response) {
+                    updateFeed(response, $('#follow'))
+                },
+                dataType: "json",
+                contentType: "application/json"
+            });
+        }
+    </script>
 </head>
 <body>
 <#import "../layout/sprite.ftl" as m>
@@ -74,60 +108,74 @@
                 <a href="/logout" class="profile__edit">
                     <span class="edit__text">Выйти из профиля</span></a>
                 </#if>
-                <form id="form${follower.userId}" action="/followUser/${follower.userId}" method=post>
-                <#if user.userId != follower.userId>
-                    <#if user.followUser?seqContains(follower)>
-                        <a href="#" class="profile__edit"
-                            onclick="document.getElementById('form${follower.userId}').submit();
-                                return false;">
-                            <span class="edit__text">Отписаться</span></a>
-                    <#else>
-                        <a href="#" class="profile__edit"
-                           onclick="document.getElementById('form${follower.userId}').submit();
-                                return false;">
-                            <span class="edit__text">Подписаться</span></a>
+<#--                <form id="form${follower.userId}" action="/followUser/${follower.userId}" method=post>-->
+<#--                <#if user.userId != follower.userId>-->
+<#--                    <#if user.followUser?seqContains(follower)>-->
+<#--                        <a href="#" class="profile__edit"-->
+<#--                            onclick="document.getElementById('form${follower.userId}').submit();-->
+<#--                                return false;">-->
+<#--                            <span class="edit__text">Отписаться</span></a>-->
+<#--                    <#else>-->
+<#--                        <a href="#" class="profile__edit"-->
+<#--                           onclick="document.getElementById('form${follower.userId}').submit();-->
+<#--                                return false;">-->
+<#--                            <span class="edit__text">Подписаться</span></a>-->
+<#--                    </#if>-->
+<#--                </#if>-->
+<#--                </form>-->
+                <div class="qwe" id="follow">
+                    <#if user.userId != follower.userId>
+                        <#if user.followUser?seqContains(follower)>
+                            <a href="#" class="profile__edit"
+                               onclick="sendAjax(${follower.userId}); return false;">
+                                <span class="edit__text">Отписаться</span></a>
+                        <#else>
+                            <a href="#" class="profile__edit"
+                               onclick="sendAjax(${follower.userId}); return false;">
+                                <span class="edit__text">Подписаться</span></a>
+                        </#if>
                     </#if>
-                </#if>
-                </form>
+                </div>
+
                 <h1 class="profile__name">${follower.userName}</h1>
                 <div class="profile__alies">${follower.userEmail}</div>
-                <div class="profile__alies">Joined: {{ twitter_user.create_time | date:"Y.m.d" }}</div>
-                <div class="profile__count-tweets">
-                    <b class="profile__count">{{ count }}</b>
-                    Твиты
-                </div>
-            </div>
-            <div class="profile__tweets">
-                <div class="profile__tweets-header">
-                    Tweets
-                </div>
-                {% if twits %}
-                {% for twit in twits %}
-                <a href="{% url 'single_twit' twit.user_creator.user_id twit.pk%}" class="tweet__item">
-                    <div class="tweet__header">
-                        <div class="tweet__image">
-                            <img src="<@spring.url '/images/default_profile_reasonably_small.png'/>" alt=""
-                                 class="tweet__img">
-                        </div>
-                        <div class="tweet__name-author">${user.userName}</div>
-                        <div class="tweet__aliase-author">${user.userEmail}</div>
-                        <div class="tweet__date-author">{{ twit.date | date:"M d,Y" }}</div>
-                    </div>
-                    <div class="tweet__text">
-                        {{ twit.text }}
-                    </div>
+<#--                <div class="profile__alies">Joined: {{ twitter_user.create_time | date:"Y.m.d" }}</div>-->
+<#--                <div class="profile__count-tweets">-->
+<#--                    <b class="profile__count">{{ count }}</b>-->
+<#--                    Твиты-->
+<#--                </div>-->
+<#--            </div>-->
+<#--            <div class="profile__tweets">-->
+<#--                <div class="profile__tweets-header">-->
+<#--                    Tweets-->
+<#--                </div>-->
+<#--                {% if twits %}-->
+<#--                {% for twit in twits %}-->
+<#--                <a href="{% url 'single_twit' twit.user_creator.user_id twit.pk%}" class="tweet__item">-->
+<#--                    <div class="tweet__header">-->
+<#--                        <div class="tweet__image">-->
+<#--                            <img src="<@spring.url '/images/default_profile_reasonably_small.png'/>" alt=""-->
+<#--                                 class="tweet__img">-->
+<#--                        </div>-->
+<#--                        <div class="tweet__name-author">${user.userName}</div>-->
+<#--                        <div class="tweet__aliase-author">${user.userEmail}</div>-->
+<#--                        <div class="tweet__date-author">{{ twit.date | date:"M d,Y" }}</div>-->
+<#--                    </div>-->
+<#--                    <div class="tweet__text">-->
+<#--                        {{ twit.text }}-->
+<#--                    </div>-->
 
-                    <button type="button" class="tweet__comment">
-                        <svg class="tweet__comment-icon">
-                            <use xlink:href="#comment"></use>
-                        </svg>
-                        <div class="tweet__reply">ответить</div>
-                    </button>
+<#--                    <button type="button" class="tweet__comment">-->
+<#--                        <svg class="tweet__comment-icon">-->
+<#--                            <use xlink:href="#comment"></use>-->
+<#--                        </svg>-->
+<#--                        <div class="tweet__reply">ответить</div>-->
+<#--                    </button>-->
 
-                </a>
-                {% endfor %}
-                {% endif %}
-            </div>
+<#--                </a>-->
+<#--                {% endfor %}-->
+<#--                {% endif %}-->
+<#--            </div>-->
         </div>
         <div class="search__block"></div>
     </div>

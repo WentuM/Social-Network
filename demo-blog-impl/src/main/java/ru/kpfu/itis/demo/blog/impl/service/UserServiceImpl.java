@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+
     @Override
     public Optional<UserDTO> findById(Long userId) {
         return usersRepository.findById(userId)

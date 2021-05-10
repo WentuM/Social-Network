@@ -3,6 +3,8 @@ package ru.kpfu.itis.demo.blog.web.security.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -34,92 +36,123 @@ import java.io.IOException;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 //@EnableOAuth2Sso
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    @Order(1)
+    @Configuration
+    public static class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    @Qualifier("customUserDetailService")
-    private UserDetailsService userDetailsService;
+        @Autowired
+        private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private DataSource dataSource;
+        @Autowired
+        @Qualifier("customUserDetailService")
+        private UserDetailsService userDetailsService;
 
-    @Autowired
-    private JwtFilter jwtFilter;
+        @Autowired
+        private DataSource dataSource;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic().disable()
-                .csrf().disable();
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests()
-                .antMatchers("/signUp").anonymous()
-                .antMatchers("/signIn").anonymous()
-                .antMatchers("/home").authenticated()
-                .antMatchers("/profile").authenticated()
-                .antMatchers("/single").authenticated()
-                .antMatchers("/static/**").permitAll()
-                .antMatchers("/geocode").permitAll()
-                .antMatchers("/oauth2").permitAll()
-                .antMatchers("/", "/signIn", "/oauth/**").permitAll()
-                .antMatchers("/followUser/**").permitAll()
-                //api
-                .antMatchers("/api/posts/**").hasRole("USER")
-                .antMatchers("/api/auth").permitAll()
-                .antMatchers("/api/profile/**").hasRole("USER")
-                .and()
-                .formLogin()
-                .loginPage("/signIn")
-                .usernameParameter("email")
-                .defaultSuccessUrl("/home")
-                .failureUrl("/signIn?error")
-                .and()
-                .oauth2Login().loginPage("/signIn").userInfoEndpoint().userService(oauthUserService)
-                .and()
-                .successHandler(new AuthenticationSuccessHandler() {
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-                        CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-                        signUpService.signUpOauth(oAuth2User.getEmail(), oAuth2User.getName());
-                        httpServletResponse.sendRedirect("/home");
-                    }
-                })
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID");
-//                .and()
-//                .rememberMe()
-//                .rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository())
-//                .and()
-//                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http.httpBasic().disable()
+                    .csrf().disable();
+            http.authorizeRequests()
+                    .antMatchers("/signUp").anonymous()
+                    .antMatchers("/signIn").anonymous()
+                    .antMatchers("/home").authenticated()
+                    .antMatchers("/profile").authenticated()
+                    .antMatchers("/single").authenticated()
+                    .antMatchers("/static/**").permitAll()
+                    .antMatchers("/geocode").permitAll()
+                    .antMatchers("/oauth2").permitAll()
+                    .antMatchers("/", "/signIn", "/oauth/**").permitAll()
+                    .antMatchers("/followUser/**").permitAll()
+                    .and()
+                    .formLogin()
+                    .loginPage("/signIn")
+                    .usernameParameter("email")
+                    .defaultSuccessUrl("/home")
+                    .failureUrl("/signIn?error")
+                    .and()
+                    .oauth2Login().loginPage("/signIn").userInfoEndpoint().userService(oauthUserService)
+                    .and()
+                    .successHandler(new AuthenticationSuccessHandler() {
+                        @Override
+                        public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+                            CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
+                            signUpService.signUpOauth(oAuth2User.getEmail(), oAuth2User.getName());
+                            httpServletResponse.sendRedirect("/home");
+                        }
+                    })
+                    .and()
+                    .logout()
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID");
 
+        }
+
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+        }
+
+        @Bean
+        public PersistentTokenRepository persistentTokenRepository() {
+            JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+            jdbcTokenRepository.setDataSource(dataSource);
+            return jdbcTokenRepository;
+        }
+
+        @Autowired
+        private CustomOAuth2UserService oauthUserService;
+
+        @Autowired
+        private SignUpService signUpService;
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-    }
+    @Order(2)
+    @Configuration
+    public static class ApiSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    public PersistentTokenRepository persistentTokenRepository() {
-        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
-        jdbcTokenRepository.setDataSource(dataSource);
-        return jdbcTokenRepository;
-    }
+        @Autowired
+        private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private CustomOAuth2UserService oauthUserService;
+        @Autowired
+        @Qualifier("customUserDetailService")
+        private UserDetailsService userDetailsService;
 
-    @Autowired
-    private SignUpService signUpService;
+        @Autowired
+        private DataSource dataSource;
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+        @Autowired
+        private JwtFilter jwtFilter;
+
+        @Bean
+        @Override
+        public AuthenticationManager authenticationManagerBean() throws Exception {
+            return super.authenticationManagerBean();
+        }
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http.httpBasic().disable()
+                    .csrf().disable();
+            http.authorizeRequests()
+                    //api
+                    .antMatchers("/api/posts/**").hasRole("USER")
+                    .antMatchers("/api/auth").permitAll()
+                    .antMatchers("/api/profile/**").hasRole("USER")
+                    .and()
+                    .formLogin().disable()
+                    .httpBasic().disable()
+                    .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        }
+
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+        }
     }
 }
