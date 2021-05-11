@@ -1,45 +1,31 @@
 package ru.kpfu.itis.demo.blog.web.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.converter.DefaultContentTypeResolver;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.converter.MessageConverter;
-import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.util.MimeTypeUtils;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
-import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-
-import java.util.List;
+import org.springframework.context.annotation.Import;
+import org.springframework.web.socket.config.annotation.*;
+import ru.kpfu.itis.demo.blog.impl.config.BlogImplConfiguration;
+import ru.kpfu.itis.demo.blog.web.websocket.WebSocketHandshakeHandler;
+import ru.kpfu.itis.demo.blog.web.websocket.WebSocketMessagesHandler;
 
 @Configuration
-@EnableWebSocketMessageBroker
+@EnableWebSocket
+@Import(BlogImplConfiguration.class)
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+    @EnableWebSocket
+    @Configuration
+    public class WebSocketConfiguration implements WebSocketConfigurer {
 
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/user");
-        config.setApplicationDestinationPrefixes("/app");
-        config.setUserDestinationPrefix("/user");
+        @Autowired
+        private WebSocketMessagesHandler messagesHandler;
+
+        @Autowired
+        private WebSocketHandshakeHandler handshakeHandler;
+
+        @Override
+        public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
+            webSocketHandlerRegistry.addHandler(messagesHandler, "/chat").setHandshakeHandler(handshakeHandler);
+        }
     }
 
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry
-                .addEndpoint("/ws")
-                .setAllowedOrigins("*")
-                .withSockJS();
-    }
-
-    @Override
-    public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
-        DefaultContentTypeResolver resolver = new DefaultContentTypeResolver();
-        resolver.setDefaultMimeType(MimeTypeUtils.APPLICATION_JSON);
-        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-        converter.setObjectMapper(new ObjectMapper());
-        converter.setContentTypeResolver(resolver);
-        messageConverters.add(converter);
-        return false;
-    }
 }

@@ -21,8 +21,6 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.kpfu.itis.demo.blog.api.service.SignUpService;
-import ru.kpfu.itis.demo.blog.api.service.UserService;
-import ru.kpfu.itis.demo.blog.impl.service.UserServiceImpl;
 import ru.kpfu.itis.demo.blog.web.security.config.jwt.JwtFilter;
 import ru.kpfu.itis.demo.blog.web.security.ouath2.CustomOAuth2User;
 import ru.kpfu.itis.demo.blog.web.security.ouath2.CustomOAuth2UserService;
@@ -67,6 +65,7 @@ public class SecurityConfig {
                     .antMatchers("/oauth2").permitAll()
                     .antMatchers("/", "/signIn", "/oauth/**").permitAll()
                     .antMatchers("/followUser/**").permitAll()
+                    .antMatchers("/index").authenticated()
                     .and()
                     .formLogin()
                     .loginPage("/signIn")
