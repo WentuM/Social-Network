@@ -1,15 +1,10 @@
 package ru.kpfu.itis.demo.blog.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import ru.kpfu.itis.demo.blog.api.dto.CommentDTO;
 import ru.kpfu.itis.demo.blog.api.dto.PostDTO;
 import ru.kpfu.itis.demo.blog.api.dto.UserDTO;
 import ru.kpfu.itis.demo.blog.api.dto.UserForm;
@@ -20,7 +15,6 @@ import ru.kpfu.itis.demo.blog.web.security.UserDetailsImpl;
 import ru.kpfu.itis.demo.blog.web.security.ouath2.CustomOAuth2User;
 
 import javax.annotation.security.PermitAll;
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 
 @Controller
