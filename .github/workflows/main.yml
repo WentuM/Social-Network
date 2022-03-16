@@ -65,6 +65,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       #Run Testss
+      - name: Docker Up
+        run: docker-compose up -d
       - name: Run Tests
-#        docker-compose up
         run: mvn -B test
