@@ -20,8 +20,8 @@ class DemoBlogImplApplicationTests {
     void contextLoads() {
     }
 
-    @Autowired
-    private UsersRepository usersRepository;
+//    @Autowired
+//    private UsersRepository usersRepository;
 
 //    @Test
 //    public void whenFindByName_thenReturnEmployee() {
