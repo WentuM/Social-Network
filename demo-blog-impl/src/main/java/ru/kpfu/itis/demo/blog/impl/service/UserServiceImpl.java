@@ -53,6 +53,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Boolean update(UserDTO userDTO) {
+        return  null;
+    }
+
+    @Override
     public Optional<UserDTO> findByEmail(String email) {
         return usersRepository.findByEmail(email)
                 .map(userEntity -> modelMapper.map(userEntity, UserDTO.class));

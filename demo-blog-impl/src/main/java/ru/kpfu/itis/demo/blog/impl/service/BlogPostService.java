@@ -73,6 +73,13 @@ public class BlogPostService implements PostService {
         return false;
     }
 
+    @Override
+    public Boolean update(PostDTO postDTO) {
+        PostEntity postEntity = modelMapper.map(postDTO, PostEntity.class);
+        postRepository.save(postEntity);
+        return true;
+    }
+
 //    public Page<PostDTO> findAllByName(String name, Pageable pageable) {
 //        if (StringUtils.hasLength(name)) {
 //            return postRepository.findAllByTittle(name, pageable)

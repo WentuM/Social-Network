@@ -63,4 +63,10 @@ public class BlogCommentService implements CommentService {
         commentRepository.deleteById(aLong);
         return true;
     }
+
+    @Override
+    public Boolean update(CommentDTO commentDTO) {
+        commentRepository.save(modelMapper.map(commentDTO, CommentEntity.class));
+        return true;
+    }
 }

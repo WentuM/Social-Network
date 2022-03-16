@@ -12,4 +12,5 @@ public interface CrudService<T, ID> {
     Boolean save(T t);
     Boolean delete(T t);
     Boolean deleteById(ID id);
+    Boolean update(T t);
 }

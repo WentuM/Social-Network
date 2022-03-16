@@ -68,6 +68,22 @@ public class PostController {
         return "redirect:/home";
     }
 
+    @PostMapping("/changePost/{postId}")
+    public String changePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @AuthenticationPrincipal CustomOAuth2User customOAuth2User, @RequestParam("body") String newName, @PathVariable Long postId) {
+        UserDTO userDTO;
+        if (userDetails == null) {
+            userDTO = userService.findByEmail(customOAuth2User.getEmail()).get();
+        } else {
+            userDTO = userService.findByEmail(userDetails.getEmail()).get();
+        }
+        PostDTO postDTO = blogPostService.findById(postId).get();
+        postDTO.setAccountDto(userDTO);
+        postDTO.setBody(newName);
+
+        blogPostService.update(postDTO);
+        return "redirect:/home";
+    }
+
 //    @RequestMapping(value="/ajax/savePost", method = RequestMethod.POST)
 //    public @ResponseBody PostDTO saveAjaxNewPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @AuthenticationPrincipal CustomOAuth2User customOAuth2User, @RequestBody PostDTO postDTO, @RequestParam("file") MultipartFile file) throws IOException {
 //        if (file != null && !file.getOriginalFilename().isEmpty()) {
@@ -94,7 +110,6 @@ public class PostController {
 //        blogPostService.save(postDTO);
 //        return postDTO;
 //    }
-
 
 
     @PostMapping("/likePost/{postId}")
