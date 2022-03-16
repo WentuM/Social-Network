@@ -20,5 +20,4 @@ class DemoBlogApiApplicationTests {
     public void testFailure() {
         Assert.assertEquals(1, 2);
     }
-
 }
