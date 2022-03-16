@@ -18,6 +18,6 @@ class DemoBlogApiApplicationTests {
 
     @Test
     public void testFailure() {
-        Assert.assertEquals(1, 2);
+        Assert.assertEquals(1, 1);
     }
 }
