@@ -1,5 +1,6 @@
 package ru.kpfu.itis.demo.blog.api;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.junit.Assert;
@@ -13,11 +14,11 @@ class DemoBlogApiApplicationTests {
 
     @Test
     public void testSuccess() {
-        Assert.assertEquals(1, 1);
+        Assertions.assertEquals(1, 1);
     }
 
     @Test
     public void testFailure() {
-        Assert.assertEquals(1, 1);
+        Assertions.assertEquals(1, 1);
     }
 }
