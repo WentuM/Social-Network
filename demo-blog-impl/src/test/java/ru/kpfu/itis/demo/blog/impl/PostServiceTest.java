@@ -55,7 +55,7 @@ public class PostServiceTest {
     }
 
     @Test
-    public void whenValidEmail_thenUserShouldBeFound() {
+    public void whenValidId_thenPostShouldBeFound() {
         Long id = 1L;
 
         PostEntity postEntity = new PostEntity();
