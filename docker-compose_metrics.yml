@@ -1,29 +1,28 @@
-version: '3.7'
+version: "3"
+
+networks:
+  loki:
 
 services:
+  loki:
+    image: grafana/loki:2.5.0
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - loki
+
+  promtail:
+    image: grafana/promtail:2.5.0
+    volumes:
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - loki
+
   grafana:
-    build: './'
+    image: grafana/grafana:latest
     ports:
-      - 3000:3000
-    volumes:
-      - ./grafana:/var/lib/grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - "3000:3000"
     networks:
-      monitoring:
-        aliases:
-          - grafana
-  prometheus:
-    image: prom/prometheus
-    ports:
-      - 9090:9090
-    volumes:
-      - ./scripts/config/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus:/prometheus
-    networks:
-      monitoring:
-        aliases:
-          - prometheus
-networks:
-  monitoring:
+      - loki
