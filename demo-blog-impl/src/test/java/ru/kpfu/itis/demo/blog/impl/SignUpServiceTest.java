@@ -107,6 +107,7 @@ class SignUpServiceTest {
 
         when(usersRepository.findByEmail(email)).thenReturn(Optional.empty());
         when(signUpService.signUp(userForm)).thenReturn(true);
+        when(usersRepository.findByEmail(email)).thenReturn(Optional.ofNullable(newUser));
 
         assertEquals(newUser, usersRepository.findByEmail(email).orElseThrow(IllegalStateException::new));
     }

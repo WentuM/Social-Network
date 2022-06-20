@@ -1,5 +1,6 @@
 package ru.kpfu.itis.demo.blog.impl;
 
+import org.checkerframework.checker.nullness.Opt;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -54,23 +55,8 @@ class ChatMessageServiceTest {
         chatMessageEntity.setContent(content);
 
         when(chatMessageRepository.save(chatMessageEntity)).thenReturn(chatMessageEntity);
+        when(chatMessageRepository.findById(id)).thenReturn(Optional.of(chatMessageEntity));
 
-        assertEquals(chatMessageEntity, chatMessageRepository.findById(chatMessageEntity.getId()));
-    }
-
-    @Test
-    public void shouldSaveChatMessageAndGetByChatId() {
-        String content = "content";
-        String id = "id";
-        String chatId = "id";
-
-        ChatMessageEntity chatMessageEntity = new ChatMessageEntity();
-        chatMessageEntity.setId(id);
-        chatMessageEntity.setChatId(chatId);
-        chatMessageEntity.setContent(content);
-
-        when(chatMessageRepository.save(chatMessageEntity)).thenReturn(chatMessageEntity);
-
-        assertEquals(chatMessageEntity, chatMessageRepository.findByChatId(chatMessageEntity.getChatId()));
+        assertEquals(Optional.of(chatMessageEntity), chatMessageRepository.findById(chatMessageEntity.getId()));
     }
 }
