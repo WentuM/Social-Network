@@ -41,7 +41,7 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
       - name: Build with Maven
-        run: mvn package
+        run: mvn compile
   tests:
     name: Unit tests
     #Run on Ubuntu using the latest version
