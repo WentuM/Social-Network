@@ -15,7 +15,7 @@ services:
     networks:
       - default
     environment:
-      DB_URL: jdbc:postgresql://postgres:5432/social-network
+      DB_URL: jdbc:postgresql://postgres:5431/social-network
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
 
@@ -23,7 +23,7 @@ services:
     image: postgres:13-alpine
     restart: always
     ports:
-      - 5432:5432
+      - 5431:5432
     environment:
       POSTGRES_DB: social-network
       POSTGRES_USER: postgres
