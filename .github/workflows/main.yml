@@ -53,7 +53,7 @@ jobs:
       - name: Build image
         run: docker image build . --file Dockerfile --tag danilponos/social-network:latest
       - name: Push image
-        run: docker image push wentum/social-network:latest
+        run: docker image push danilponos/social-network:latest
 
   tests:
     name: Unit tests
