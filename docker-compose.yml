@@ -3,10 +3,10 @@ version: '3'
 services:
   app:
     container_name: social-network
-    image: book-review-site
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: WentuM/Social-Network:1.0.0
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
     depends_on:
       - postgres
     ports:

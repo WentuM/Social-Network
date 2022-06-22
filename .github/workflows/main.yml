@@ -42,6 +42,16 @@ jobs:
           distribution: 'adopt'
       - name: Build with Maven
         run: mvn compile
+      - name: Login
+        uses: docker/login-action@v1
+        with:
+          username: ${{ docker_secrets.DOCKER_ID }}
+          password: ${{ docker_secrets.DOCKER_TOKEN }}
+      - uses: actions/checkout@v2
+      - name: Build image
+        run: docker image build . --file deploy/python/Dockerfile --tag WentuM/Social-Network:1.0.0
+      - name: Push image
+        run: docker image push WentuM/Social-Network:1.0.0
 
   tests:
     name: Unit tests
@@ -76,14 +86,14 @@ jobs:
     runs-on: self-hosted
     needs: tests
     steps:
-      - name: Make pull
+      - name: Pulling app
         uses: actions/checkout@v3
 
-      - name: Stop containers
+      - name: Stoping containers
         run: docker-compose stop
 
-      - name: Remove containers
+      - name: Removing containers
         run: docker-compose rm -f
 
-      - name: Start container
+      - name: Starting container
         run: docker-compose up --build -d
