@@ -44,6 +44,7 @@ jobs:
         run: docker-compose -f docker-compose.db.yml up -d
       - name: Build with Maven
         run: mvn package
+
   tests:
     name: Unit tests
     #Run on Ubuntu using the latest version
