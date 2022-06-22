@@ -69,6 +69,6 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       #Run Tests
       - name: Docker Up
-        run: docker-compose up -d -f docker-compose.db.yml
+        run: docker-compose -f docker-compose.db.yml up -d
       - name: Run Tests
         run: mvn -B test
