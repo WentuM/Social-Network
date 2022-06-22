@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 8
+      - name: Set up JDK 8 
         uses: actions/setup-java@v2
         with:
           java-version: '8'
@@ -51,7 +51,7 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
       - uses: actions/checkout@v2
       - name: Build image
-        run: docker image build . --file Dockerfile --tag wentum/social-network:latest
+        run: docker image build . --file Dockerfile --tag danilponos/social-network:latest
       - name: Push image
         run: docker image push wentum/social-network:latest
 
