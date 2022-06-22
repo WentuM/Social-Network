@@ -1,5 +1,6 @@
 package ru.kpfu.itis.demo.blog.web;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,16 +10,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.kpfu.itis.demo.blog.web.dto.UserForm;
-import ru.kpfu.itis.demo.blog.web.service.SignUpService;
 import ru.kpfu.itis.demo.blog.web.entity.UserEntity;
 import ru.kpfu.itis.demo.blog.web.jpa.repository.UsersRepository;
+import ru.kpfu.itis.demo.blog.web.service.SignUpService;
 import ru.kpfu.itis.demo.blog.web.service.SignUpServiceImpl;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class SignUpServiceTest {

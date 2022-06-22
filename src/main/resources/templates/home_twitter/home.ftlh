@@ -95,22 +95,22 @@
                             <div class="tweet__aliase-author">${post.accountDto.userEmail}</div>
                             <div class="tweet__date-author">${post.createdAt}</div>
                         </div>
-                        <#--                        <div class="tweet__text">-->
-                        <#--                            ${post.body}-->
-                        <#--                        </div>-->
-                        <form id="form${post.id}" class="card-link" action="/changePost/${post.id}" method=post>
-                            <div class="write__tweet-field">
+                        <div class="tweet__text">
+                            ${post.body}
+                        </div>
+                        <#--                        <form id="form${post.id}" class="card-link" action="/changePost/${post.id}" method=post>-->
+                        <#--                            <div class="write__tweet-field">-->
 
-                            <textarea name="body" class="write__tweet-text" id="body" cols="30" rows="10"
-                                      placeholder="${post.body}"></textarea>
-                            </div>
+                        <#--                            <textarea name="body" class="write__tweet-text" id="body" cols="30" rows="10"-->
+                        <#--                                      placeholder="${post.body}"></textarea>-->
+                        <#--                            </div>-->
 
-                            <div class="send__tweet">
-                                <button class="send__tweet-btn" type="submit">
-                                    Изменить текст
-                                </button>
-                            </div>
-                        </form>
+                        <#--                            <div class="send__tweet">-->
+                        <#--                                <button class="send__tweet-btn" type="submit">-->
+                        <#--                                    Изменить текст-->
+                        <#--                                </button>-->
+                        <#--                            </div>-->
+                        <#--                        </form>-->
                         <div>
                             <#if post.filename??>
                                 <img src="<@spring.url 'images/${post.filename}'/>"
