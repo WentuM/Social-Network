@@ -40,13 +40,15 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
+      - name: Docker Up
+        run: docker-compose -f docker-compose.db.yml up -d
       - name: Build with Maven
-        run: mvn compile
+        run: mvn install
       - name: Login
         uses: docker/login-action@v1
         with:
-          username: ${{ docker_secrets.DOCKER_ID }}
-          password: ${{ docker_secrets.DOCKER_TOKEN }}
+          username: ${{ secrets.DOCKER_ID }}
+          password: ${{ secrets.DOCKER_TOKEN }}
       - uses: actions/checkout@v2
       - name: Build image
         run: docker image build . --file deploy/python/Dockerfile --tag WentuM/Social-Network:1.0.0
