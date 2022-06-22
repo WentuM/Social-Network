@@ -51,9 +51,9 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
       - uses: actions/checkout@v2
       - name: Build image
-        run: docker image build . --file deploy/python/Dockerfile --tag wentum/social-network:1.0.0
+        run: docker image build . --file Dockerfile --tag wentum/social-network:latest
       - name: Push image
-        run: docker image push WentuM/Social-Network:1.0.0
+        run: docker image push wentum/social-network:latest
 
   tests:
     name: Unit tests

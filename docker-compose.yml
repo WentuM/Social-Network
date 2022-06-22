@@ -3,7 +3,7 @@ version: '3'
 services:
   app:
     container_name: social-network
-    image: WentuM/Social-Network:1.0.0
+    image: wentum/social-network:latest
 #    build:
 #      context: .
 #      dockerfile: Dockerfile
