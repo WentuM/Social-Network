@@ -40,10 +40,8 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
-      - name: Docker Up
-        run: docker-compose -f docker-compose.db.yml up -d
       - name: Build with Maven
-        run: mvn package
+        run: mvn compile
 
   tests:
     name: Unit tests
@@ -79,8 +77,7 @@ jobs:
     needs: tests
     steps:
       - name: Make pull
-        uses: actions/checkout@a81bbbf8298c0fa03ea29cdc473d45769f953675
-
+        uses: actions/checkout@v2
       - name: Stop containers
         run: docker-compose stop
 
