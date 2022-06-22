@@ -78,6 +78,7 @@ jobs:
     steps:
       - name: Make pull
         uses: actions/checkout@v2
+
       - name: Stop containers
         run: docker-compose stop
 

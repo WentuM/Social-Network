@@ -55,6 +55,7 @@ public class SecurityConfig {
             http.httpBasic().disable()
                     .csrf().disable();
             http.authorizeRequests()
+                    .antMatchers("/actuator/**").permitAll()
                     .antMatchers("/signUp").anonymous()
                     .antMatchers("/signIn").anonymous()
                     .antMatchers("/home").authenticated()
@@ -139,6 +140,7 @@ public class SecurityConfig {
                     .csrf().disable();
             http.authorizeRequests()
                     //api
+                    .antMatchers("/actuator/**").permitAll()
                     .antMatchers("/api/posts/**").hasRole("USER")
                     .antMatchers("/api/auth").permitAll()
                     .antMatchers("/api/profile/**").hasRole("USER")
