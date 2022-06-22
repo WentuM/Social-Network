@@ -1,0 +1,19 @@
+version: 3
+services:
+  pg:
+    image: postgres:13-alpine
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: social-network
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ../2. Init Database:/docker-entrypoint-initdb.d
+      - db:/var/lib/postgresql/data
+    networks:
+      - default
+
+volumes:
+  db:
