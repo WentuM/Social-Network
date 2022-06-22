@@ -1,0 +1,24 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 848089175300-lence6iue2dtvsoa2n21p9b8gr9n5815.apps.googleusercontent.com
+            clientSecret: qG0mag9inxRX5UaW6ldrjBUD
+            scope:
+              - email
+              - profile
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
