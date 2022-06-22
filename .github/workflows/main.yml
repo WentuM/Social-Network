@@ -77,7 +77,7 @@ jobs:
     needs: tests
     steps:
       - name: Make pull
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Stop containers
         run: docker-compose stop
