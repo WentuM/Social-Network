@@ -9,17 +9,15 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import ru.kpfu.itis.demo.blog.web.dto.UserDTO;
-import ru.kpfu.itis.demo.blog.web.service.UserService;
 import ru.kpfu.itis.demo.blog.web.entity.UserEntity;
 import ru.kpfu.itis.demo.blog.web.jpa.repository.UsersRepository;
+import ru.kpfu.itis.demo.blog.web.service.UserService;
 import ru.kpfu.itis.demo.blog.web.service.UserServiceImpl;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class UserServiceTest {
