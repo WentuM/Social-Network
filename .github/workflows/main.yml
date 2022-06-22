@@ -72,3 +72,19 @@ jobs:
         run: docker-compose -f docker-compose.db.yml up -d
       - name: Run Tests
         run: mvn -B test
+
+  deployment:
+    runs-on: self-hosted
+    needs: tests
+    steps:
+      - name: Make pull
+        uses: actions/checkout@v2
+
+      - name: Stop containers
+        run: docker-compose stop
+
+      - name: Remove containers
+        run: docker-compose rm -f
+
+      - name: Start container
+        run: docker-compose up --build -d
